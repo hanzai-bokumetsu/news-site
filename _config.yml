@@ -1,0 +1,5 @@
+title: "news-site"
+description: "ニュース記事をまとめるサイト"
+theme: minima        # 標準テーマ
+show_excerpts: true  # トップで本文の冒頭を表示
+permalink: /:year/:month/:day/:title/
