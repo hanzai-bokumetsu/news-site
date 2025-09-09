@@ -80,3 +80,22 @@ a:hover { opacity: .9; }
 }
 .hero h1 { margin: 0 0 .2em; font-size: 1.6rem; }
 .hero p { color: #cbd5e1; margin: 0; }
+
+
+/*ポストカード*/
+.post-card {
+  display: flex;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+}
+.post-card img {
+  width: 140px; height: 100px; object-fit: cover;
+  border-radius: 8px;
+}
+.post-card .content { flex: 1; }
+.post-card h2 { margin: 0 0 6px; font-size: 1.1rem; }
+.post-card .excerpt { color: #cbd5e1; font-size: .9rem; }
