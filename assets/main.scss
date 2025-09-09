@@ -1,0 +1,82 @@
+---
+# この2行はJekyll用のフロントマター。中身は空でOK
+---
+
+@import "minima";
+
+/* ===== 基本トーン ===== */
+:root{
+  --bg:#0f172a;        /* 背景(濃紺) */
+  --card:#111827;      /* カード */
+  --text:#e5e7eb;      /* 文字(薄灰) */
+  --muted:#94a3b8;     /* 補助テキスト */
+  --accent:#22d3ee;    /* アクセント(シアン) */
+  --border:rgba(148,163,184,.25);
+}
+
+body {
+  background: radial-gradient(1200px 800px at 80% -10%, #1f2937 0, transparent 60%), var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+}
+
+/* 幅・余白 */
+.page-content { padding: 2rem 0 4rem; }
+.wrapper { max-width: 980px; }
+
+/* ヘッダー */
+.site-header { 
+  background: rgba(17,24,39,.6); 
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--border);
+}
+.site-title, .site-nav .page-link { color: var(--text) !important; }
+.site-title:hover, .site-nav .page-link:hover { color: var(--accent) !important; }
+
+/* 記事一覧（カード化） */
+.post-list { list-style: none; padding-left: 0; display: grid; gap: 18px; }
+.post-list > li {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.post-list > li:hover { 
+  transform: translateY(-2px); 
+  border-color: rgba(34,211,238,.35);
+  box-shadow: 0 10px 26px rgba(0,0,0,.25);
+}
+
+.post-link { 
+  color: var(--text); 
+  font-weight: 700; 
+  font-size: 1.1rem;
+}
+.post-meta { color: var(--muted); font-size: .9rem; }
+
+/* 抜粋テキストを2行で省略 */
+.post-excerpt {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; color: #cbd5e1; margin-top: 6px;
+}
+
+/* 本文ページ（読みやすさ） */
+.post-title { color: var(--text); }
+.post-content img { max-width: 100%; border-radius: 10px; display:block; margin: 14px auto; }
+.post-content h2, .post-content h3 { margin-top: 1.6em; }
+.post-content ul { padding-left: 1.2em; }
+a { color: var(--accent); }
+a:hover { opacity: .9; }
+
+/* ヒーロー(任意で使える) */
+.hero {
+  background: linear-gradient(135deg, rgba(34,211,238,.12), rgba(34,197,94,.10));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin: 18px 0 26px;
+}
+.hero h1 { margin: 0 0 .2em; font-size: 1.6rem; }
+.hero p { color: #cbd5e1; margin: 0; }
