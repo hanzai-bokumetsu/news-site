@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<div class="post-list">
+  {%- for post in site.posts -%}
+  <article class="post-card">
+    {% if post.image %}
+      <div class="thumb">
+        <img src="{{ post.image | relative_url }}" alt="{{ post.title }}">
+      </div>
+    {% endif %}
+    <div class="content">
+      <h2><a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+      <p class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</p>
+      <p class="excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
+    </div>
+  </article>
+  {%- endfor -%}
+</div>
