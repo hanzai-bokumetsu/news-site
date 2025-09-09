@@ -7,3 +7,6 @@ url: "https://hanzai-bokumetsu.github.io"
 baseurl: "/news-site"
 header_pages:
   - about.md
+  - policy.md
+  - categories.md
+  - contact.md
