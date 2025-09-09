@@ -12,22 +12,34 @@ layout: default
 
   {%- if site.posts.size > 0 -%}
     <h2 class="post-list-heading">{{ page.list_title | default: "最新記事" }}</h2>
-    <div class="post-list">
+
+    <!-- 2列グリッド -->
+    <div class="post-grid">
       {%- for post in site.posts -%}
       <article class="post-card">
         {% if post.image %}
-          <div class="thumb">
+          <a class="thumb" href="{{ post.url | relative_url }}">
             <img src="{{ post.image | relative_url }}" alt="{{ post.title }}">
-          </div>
+          </a>
         {% endif %}
-        <div class="content">
-          <h2><a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-          <p class="post-meta">{{ post.date | date: "%Y-%m-%d" }}</p>
+
+        <div class="card-body">
+          <div class="meta-line">
+            <span class="date-pill">{{ post.date | date: "%Y-%m-%d" }}</span>
+            <!-- カテゴリバッジ（最大2件表示） -->
+            {% for cat in post.categories limit:2 %}
+              <a class="badge" href="{{ '/categories/' | append: cat | append: '/' | relative_url }}">{{ cat }}</a>
+            {% endfor %}
+          </div>
+
+          <h2 class="card-title">
+            <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </h2>
+
           <p class="excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
         </div>
       </article>
       {%- endfor -%}
     </div>
   {%- endif -%}
-
 </div>
