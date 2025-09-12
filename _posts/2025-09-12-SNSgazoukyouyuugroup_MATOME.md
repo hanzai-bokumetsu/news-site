@@ -1,7 +1,7 @@
 ---
 title: "【衝撃】教員によるSNS盗撮わいせつ画像共有グループ事件、まとめ"
 date: 2025-09-12 14:00:00 +0900
-categories: [性犯罪, 愛知県, 神奈川県, 教師,児童]
+categories: [性犯罪, 愛知県, 神奈川県, 教員,児童]
 image: /assets/img/2025091101.png
 ---
 ![事件イメージ]({{ site.baseurl }}/assets/img/2025091101.png)
