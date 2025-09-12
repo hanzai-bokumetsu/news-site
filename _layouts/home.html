@@ -6,40 +6,75 @@ layout: default
 
   {%- if page.title -%}
     <h1 class="page-heading">{{ page.title }}</h1>
+  {%- else -%}
+    <h1 class="page-heading">ニュース一覧</h1>
   {%- endif -%}
 
   {{ content }}
 
-  {%- if site.posts.size > 0 -%}
+  {%- comment -%}
+    paginator が有効なら paginator.posts、なければ site.posts を使う
+  {%- endcomment -%}
+  {%- assign posts_collection = paginator.posts | default: site.posts -%}
+
+  {%- if posts_collection and posts_collection.size > 0 -%}
     <h2 class="post-list-heading">{{ page.list_title | default: "最新記事" }}</h2>
 
     <!-- 2列グリッド -->
     <div class="post-grid">
-      {%- for post in site.posts -%}
-      <article class="post-card">
-        {% if post.image %}
-          <a class="thumb" href="{{ post.url | relative_url }}">
-            <img src="{{ post.image | relative_url }}" alt="{{ post.title }}">
-          </a>
-        {% endif %}
+      {%- for post in posts_collection -%}
+      <article class="post-card" itemscope itemtype="https://schema.org/Article">
+        {%- assign thumb_url = post.image | default: "/assets/img/placeholder.jpg" -%}
+        <a class="thumb" href="{{ post.url | relative_url }}" aria-label="{{ post.title }}">
+          <img src="{{ thumb_url | relative_url }}" alt="{{ post.title }}" loading="lazy" itemprop="image">
+        </a>
 
         <div class="card-body">
           <div class="meta-line">
-            <span class="date-pill">{{ post.date | date: "%Y-%m-%d" }}</span>
-            <!-- カテゴリバッジ（最大2件表示） -->
-            {% for cat in post.categories limit:2 %}
-              <a class="badge" href="{{ '/categories/' | append: cat | append: '/' | relative_url }}">{{ cat }}</a>
-            {% endfor %}
+            <time class="date-pill" datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">
+              {{ post.date | date: "%Y-%m-%d" }}
+            </time>
+
+            {%- comment -%}
+              カテゴリを最大6件まで表示。日本語カテゴリは url_encode してリンクを安全化
+            {%- endcomment -%}
+            {%- if post.categories and post.categories.size > 0 -%}
+              {%- for cat in post.categories limit:6 -%}
+                <a class="badge"
+                   href="{{ '/categories/' | append: cat | url_encode | append: '/' | relative_url }}"
+                   title="カテゴリ: {{ cat }}">{{ cat }}</a>
+              {%- endfor -%}
+            {%- endif -%}
           </div>
 
-          <h2 class="card-title">
+          <h2 class="card-title" itemprop="headline">
             <a class="post-link" href="{{ post.url | relative_url }}">{{ post.title }}</a>
           </h2>
 
-          <p class="excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
+          {%- comment -%}
+            抜粋：front matter の excerpt があれば優先、なければ本文から生成
+          {%- endcomment -%}
+          {%- assign ex = post.excerpt | default: post.content | strip_html | normalize_whitespace -%}
+          <p class="excerpt" itemprop="description">{{ ex | truncate: 120 }}</p>
         </div>
       </article>
       {%- endfor -%}
     </div>
+
+    {%- if paginator -%}
+    <!-- ページネーション（paginator が有効な場合のみ表示） -->
+    <nav class="pagination" role="navigation" aria-label="Pagination" style="margin-top:22px;">
+      {%- if paginator.previous_page -%}
+        <a class="badge" href="{{ paginator.previous_page_path | relative_url }}">&laquo; 新しい記事</a>
+      {%- endif -%}
+      <span class="date-pill" style="margin:0 8px;">{{ paginator.page }} / {{ paginator.total_pages }}</span>
+      {%- if paginator.next_page -%}
+        <a class="badge" href="{{ paginator.next_page_path | relative_url }}">過去の記事 &raquo;</a>
+      {%- endif -%}
+    </nav>
+    {%- endif -%}
+
+  {%- else -%}
+    <p>まだ投稿がありません。</p>
   {%- endif -%}
 </div>
