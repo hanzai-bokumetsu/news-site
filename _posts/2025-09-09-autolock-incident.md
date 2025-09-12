@@ -1,7 +1,7 @@
 ---
 title: "【卑劣】西宮市20代女性をSNSで知り合った男2人がオートロックすり抜け性的暴行事件【逮捕へ】"
 date: 2025-09-09 09:29:00 +0900
-categories: [性犯罪, 大阪, 兵庫]
+categories: [性犯罪, 大阪府, 兵庫県]
 image: /assets/img/2025090901.jpg
 ---
 ![事件イメージ]({{ site.baseurl }}/assets/img/2025090901.jpg)
