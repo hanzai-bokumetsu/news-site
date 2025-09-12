@@ -183,3 +183,7 @@ a:hover { opacity: .9; }
   border: 1px solid #ccc;
   padding: 8px;
 }
+
+/* 複数カテゴリバッジの並び安定用 */
+.meta-line { display:flex; flex-wrap:wrap; gap:8px; }
+.badge { display:inline-flex; align-items:center; height:24px; }
