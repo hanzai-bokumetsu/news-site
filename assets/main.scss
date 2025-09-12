@@ -168,3 +168,18 @@ a:hover { opacity: .9; }
 /* ヒーローブロックの余白微調整（好みで） */
 .hero { margin-top: 12px; }
 
+/* ===== テーブル（表）を白地にして読みやすくする ===== */
+.post-content table {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.post-content table th,
+.post-content table td {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
