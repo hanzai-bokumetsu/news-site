@@ -84,13 +84,19 @@ def extract_main_image(entry):
 def fetch_fulltext(url):
     try:
         r = requests.get(url, timeout=10, headers={"User-Agent":"Mozilla/5.0"})
-        r.raise_for_status()
-        doc = Document(r.text)
+        # 文字コードを明示（誤判定対策）
+        # requests は apparent_encoding を持っているので、まずそれを採用。
+        enc = (getattr(r, "apparent_encoding", None) or r.encoding or "").lower()
+        r.encoding = enc if enc else "utf-8"
+        html_text = r.text
+
+        doc = Document(html_text)
         title = doc.short_title()
         content_html = doc.summary(html_partial=True)
         return title, content_html
     except Exception:
         return None, None
+
 
 def make_front_matter(title, date, categories, image_path, original_url):
     cats_yaml = ", ".join([f'"{c}"' for c in sorted(categories)])
