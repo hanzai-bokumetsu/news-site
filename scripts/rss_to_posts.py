@@ -14,6 +14,7 @@ IMGDIR.mkdir(exist_ok=True, parents=True)
 
 # —— 設定 —— #
 FEEDS = [
+        "https://www3.nhk.or.jp/rss/news/cat0.xml",
     # ★ここに取り込みたいRSS/Atomを入れる（最初は2〜3個でOK）
     # 例:
     # "https://www3.nhk.or.jp/rss/news/cat0.xml",
