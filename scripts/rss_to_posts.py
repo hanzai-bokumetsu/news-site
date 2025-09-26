@@ -150,11 +150,13 @@ def main():
 
             body = ""
             if image_path:
-                # baseurlはJekyllが置換
-                body += f"![記事イメージ]({{ {{ site.baseurl }} }}{image_path})\n\n"
+                body += "{{ site.baseurl }}" + image_path  # Jekyllで展開されるbaseurl
+                body = "![記事イメージ](" + body + ")\n\n"
+
             if content_html:
                 body += "## 記事本文（自動抽出）\n" + content_html + "\n\n"
             body += f"[出典はこちら]({link})\n"
+
 
             post_path.parent.mkdir(parents=True, exist_ok=True)
             post_path.write_text(fm + "\n" + body, encoding="utf-8")
