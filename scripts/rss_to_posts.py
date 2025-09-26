@@ -94,16 +94,19 @@ def fetch_fulltext(url):
 
 def make_front_matter(title, date, categories, image_path, original_url):
     cats_yaml = ", ".join([f'"{c}"' for c in sorted(categories)])
-    fm = textwrap.dedent(f"""\
-    ---
-    title: "{title.replace('"','\\"')}"
-    date: {date.strftime("%Y-%m-%d %H:%M:%S")} +0900
-    categories: [{cats_yaml}]
-    image: {image_path if image_path else ""}
-    source: "{original_url}"
-    ---
-    """)
+    safe_title = title.replace('"', '\\"')  # 先にエスケープしておく（f式内に\を入れない）
+
+    fm = (
+        "---\n"
+        f'title: "{safe_title}"\n'
+        f"date: {date.strftime('%Y-%m-%d %H:%M:%S')} +0900\n"
+        f"categories: [{cats_yaml}]\n"
+        f"image: {image_path if image_path else ''}\n"
+        f'source: "{original_url}"\n'
+        "---\n"
+    )
     return fm
+
 
 def sanitize_filename(s):
     return re.sub(r"[^a-z0-9\-]+","-", slugify(s)).strip("-")
