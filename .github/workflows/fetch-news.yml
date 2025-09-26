@@ -1,0 +1,40 @@
+name: Fetch & Post News
+
+on:
+  schedule:
+    # JST 09:00 / 15:00 / 21:00（GitHubはUTC）
+    - cron: "0 0,6,12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install feedparser requests python-slugify pyyaml readability-lxml lxml
+
+      - name: Run fetcher
+        env:
+          TZ: Asia/Tokyo
+        run: python scripts/rss_to_posts.py
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name "news-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "chore: auto-post from RSS [skip ci]"
+          git push
