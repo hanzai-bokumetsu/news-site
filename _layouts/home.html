@@ -24,10 +24,17 @@ layout: default
     <div class="post-grid">
       {%- for post in posts_collection -%}
       <article class="post-card" itemscope itemtype="https://schema.org/Article">
-        {%- assign thumb_url = post.image | default: "/assets/img/placeholder.jpg" -%}
-        <a class="thumb" href="{{ post.url | relative_url }}" aria-label="{{ post.title }}">
-          <img src="{{ thumb_url | relative_url }}" alt="{{ post.title }}" loading="lazy" itemprop="image">
-        </a>
+    <a class="thumb" href="{{ post.url | relative_url }}" aria-label="{{ post.title }}">
+      {% if post.image %}
+    <img class="post-thumb" src="{{ post.image | relative_url }}" alt="{{ post.title }}" loading="lazy" itemprop="image">
+      {% else %}
+      {% assign cat = post.categories | first | default: 'ニュース' %}
+      {% assign cat_slug = cat | replace: ' ', '-' %}
+    <div class="thumb-placeholder cat-{{ cat_slug }}">
+      {{ cat | slice: 0, 1 }}
+    </div>
+      {% endif %}
+    </a>
 
         <div class="card-body">
           <div class="meta-line">
