@@ -67,10 +67,11 @@ PREFS = [
 ]
 
 # フィード固有のカテゴリ（必要なら追加）
-FEED_DEFAULTS.update({
+FEED_DEFAULTS = {
     "https://news.yahoo.co.jp/rss/topics/sports.xml": ["スポーツ"],
     "https://news.google.com/rss/search?q=スポーツ&hl=ja&gl=JP&ceid=JP:ja": ["スポーツ"],
-})
+}
+
 
 IMG_TIMEOUT = 10
 
