@@ -33,6 +33,10 @@ jobs:
           TZ: Asia/Tokyo
         run: python scripts/rss_to_posts.py
 
+      - name: Sync category pages
+        run: python scripts/sync_categories.py
+
+
       - name: Commit & push if changed
         run: |
           set -e
@@ -54,3 +58,5 @@ jobs:
           # プッシュ（先に通常、ダメなら lease 付き強制）
           git push origin HEAD:"${{ github.ref_name }}" || \
           git push --force-with-lease origin HEAD:"${{ github.ref_name }}"
+
+
