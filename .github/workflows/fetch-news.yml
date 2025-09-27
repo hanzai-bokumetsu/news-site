@@ -41,12 +41,16 @@ jobs:
 
           git add -A
           if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
+           echo "No changes to commit."
+           exit 0
           fi
 
-          # 最新を取り込んでからコミット→プッシュ
-          git pull --rebase origin "${{ github.ref_name }}" || true
+          # まずコミット
           git commit -m "chore: auto-post from RSS [skip ci]"
+
+          # その上で最新を取り込み（作業ツリーを自動一時退避）
+          git pull --rebase --autostash origin "${{ github.ref_name }}" || true
+
+          # プッシュ（先に通常、ダメなら lease 付き強制）
           git push origin HEAD:"${{ github.ref_name }}" || \
-            git push --force-with-lease origin HEAD:"${{ github.ref_name }}"
+          git push --force-with-lease origin HEAD:"${{ github.ref_name }}"
