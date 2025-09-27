@@ -14,8 +14,19 @@ IMGDIR.mkdir(exist_ok=True, parents=True)
 
 # —— 設定 —— #
 FEEDS = [
-    "https://www3.nhk.or.jp/rss/news/cat0.xml",
-    # "https://news.yahoo.co.jp/rss/topics/domestic.xml",
+    "https://www3.nhk.or.jp/rss/news/cat0.xml",                 # NHK 総合
+    "https://news.yahoo.co.jp/rss/topics/domestic.xml",         # Yahoo! 国内
+    "https://news.yahoo.co.jp/rss/topics/world.xml",            # Yahoo! 国際
+    "https://news.yahoo.co.jp/rss/topics/local.xml",            # Yahoo! 地域
+    "https://news.yahoo.co.jp/rss/topics/sports.xml",           # Yahoo! スポーツ
+
+    # —— Google News（RSS生成。媒体横断）——
+    # 日本のトップニュース
+    "https://news.google.com/rss?hl=ja&gl=JP&ceid=JP:ja",
+    # 犯罪・事件系（キーワードベース）
+    "https://news.google.com/rss/search?q=逮捕+OR+容疑+OR+事件&hl=ja&gl=JP&ceid=JP:ja",
+    # スポーツ全般
+    "https://news.google.com/rss/search?q=スポーツ&hl=ja&gl=JP&ceid=JP:ja",
 ]
 SITE_BASEURL = "{{ site.baseurl }}"
 
@@ -56,9 +67,10 @@ PREFS = [
 ]
 
 # フィード固有のカテゴリ（必要なら追加）
-FEED_DEFAULTS = {
-    # 例: "https://www3.nhk.or.jp/rss/news/cat5.xml": ["スポーツ"],
-}
+FEED_DEFAULTS.update({
+    "https://news.yahoo.co.jp/rss/topics/sports.xml": ["スポーツ"],
+    "https://news.google.com/rss/search?q=スポーツ&hl=ja&gl=JP&ceid=JP:ja": ["スポーツ"],
+})
 
 IMG_TIMEOUT = 10
 
