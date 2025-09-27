@@ -1,4 +1,4 @@
-import os, re, json, hashlib, datetime, pathlib, textwrap
+import os, re, json, hashlib, datetime, pathlib, textwrap, unicodedata
 import feedparser, requests
 from slugify import slugify
 from lxml import html
@@ -14,23 +14,54 @@ IMGDIR.mkdir(exist_ok=True, parents=True)
 
 # —— 設定 —— #
 FEEDS = [
-        "https://www3.nhk.or.jp/rss/news/cat0.xml",
-    # ★ここに取り込みたいRSS/Atomを入れる（最初は2〜3個でOK）
-    # 例:
-    # "https://www3.nhk.or.jp/rss/news/cat0.xml",
+    "https://www3.nhk.or.jp/rss/news/cat0.xml",
     # "https://news.yahoo.co.jp/rss/topics/domestic.xml",
 ]
 SITE_BASEURL = "{{ site.baseurl }}"
+
 CATEGORY_MAPPING = {
-    # キーワード→カテゴリ自動付与（必要に応じて足す）
     "教員": ["性犯罪", "教員"],
     "教師": ["性犯罪", "教員"],
     "女子生徒": ["児童"],
     "京都": ["京都府"],
     "大阪": ["大阪府"],
 }
-DEFAULT_TOPIC = ["犯罪"]
+
+# 犯罪ワード
+CRIME_KEYWORDS = [
+    "逮捕","容疑","容疑者","送検","起訴","不起訴","被告","強盗","窃盗","詐欺",
+    "わいせつ","盗撮","強制","傷害","暴行","殺人","覚醒剤","麻薬","拳銃","横領",
+    "児童買春","淫行","誘拐","性犯罪","猥褻","強制性交","迷惑防止条例"
+]
+
+# スポーツワード
+SPORTS_KEYWORDS = [
+    "ホームラン","打点","先発","登板","投手","打者","カープ","阪神","巨人","DeNA",
+    "ベイスターズ","ヤクルト","中日","日本ハム","日ハム","オリックス","ソフトバンク",
+    "ロッテ","楽天","NPB","Jリーグ","Ｊ１","ゴール","アシスト","ワールドカップ","W杯",
+    "オリンピック","相撲","ボクシング","ラグビー","F1","グランプリ","試合","優勝","順位",
+    "打率","防御率","本塁打"
+]
+
+# 都道府県リスト
+PREFS = [
+    "北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県",
+    "茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県",
+    "新潟県","富山県","石川県","福井県","山梨県","長野県",
+    "岐阜県","静岡県","愛知県","三重県",
+    "滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県",
+    "鳥取県","島根県","岡山県","広島県","山口県",
+    "徳島県","香川県","愛媛県","高知県",
+    "福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"
+]
+
+# フィード固有のカテゴリ（必要なら追加）
+FEED_DEFAULTS = {
+    # 例: "https://www3.nhk.or.jp/rss/news/cat5.xml": ["スポーツ"],
+}
+
 IMG_TIMEOUT = 10
+
 
 def load_seen():
     f = DB / "seen.json"
@@ -41,13 +72,54 @@ def load_seen():
 def save_seen(d):
     (DB / "seen.json").write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
 
-def guess_categories(title, summary):
-    cats = set(DEFAULT_TOPIC)
-    text = f"{title} {summary}"
+def normalize_text(s: str) -> str:
+    if not s:
+        return ""
+    return unicodedata.normalize("NFKC", s)
+
+def guess_categories(title, summary, entry=None, feed_url=None):
+    cats = set()
+    text = normalize_text(f"{title} {summary}")
+
+    # マッピングから付与
     for k, vals in CATEGORY_MAPPING.items():
         if k in text:
             cats.update(vals)
+
+    # 犯罪ワード
+    if any(k in text for k in CRIME_KEYWORDS):
+        cats.add("犯罪")
+
+    # スポーツワード
+    if any(k in text for k in SPORTS_KEYWORDS):
+        cats.add("スポーツ")
+
+    # RSSタグからも判定
+    try:
+        for t in (entry.get("tags") or []):
+            term = normalize_text((t.get("term") or ""))
+            if any(x in term for x in ["スポーツ","野球","サッカー","相撲","テニス","ゴルフ","ラグビー","F1"]):
+                cats.add("スポーツ")
+            if any(x in term for x in ["事件","事故","裁判","犯罪","わいせつ"]):
+                cats.add("犯罪")
+    except Exception:
+        pass
+
+    # 都道府県
+    for p in PREFS:
+        if p in text:
+            cats.add(p)
+
+    # フィード固有カテゴリ
+    if feed_url in FEED_DEFAULTS:
+        cats.update(FEED_DEFAULTS[feed_url])
+
+    # 何も付かないときは汎用
+    if not cats:
+        cats.add("ニュース")
+
     return list(cats)
+
 
 def fetch_image(url):
     try:
@@ -84,8 +156,6 @@ def extract_main_image(entry):
 def fetch_fulltext(url):
     try:
         r = requests.get(url, timeout=10, headers={"User-Agent":"Mozilla/5.0"})
-        # 文字コードを明示（誤判定対策）
-        # requests は apparent_encoding を持っているので、まずそれを採用。
         enc = (getattr(r, "apparent_encoding", None) or r.encoding or "").lower()
         r.encoding = enc if enc else "utf-8"
         html_text = r.text
@@ -97,22 +167,21 @@ def fetch_fulltext(url):
     except Exception:
         return None, None
 
-
 def make_front_matter(title, date, categories, image_path, original_url):
     cats_yaml = ", ".join([f'"{c}"' for c in sorted(categories)])
-    safe_title = title.replace('"', '\\"')  # 先にエスケープしておく（f式内に\を入れない）
+    safe_title = title.replace('"', '\\"')
 
-    fm = (
-        "---\n"
-        f'title: "{safe_title}"\n'
-        f"date: {date.strftime('%Y-%m-%d %H:%M:%S')} +0900\n"
-        f"categories: [{cats_yaml}]\n"
-        f"image: {image_path if image_path else ''}\n"
-        f'source: "{original_url}"\n'
-        "---\n"
-    )
-    return fm
-
+    lines = [
+        "---",
+        f'title: "{safe_title}"',
+        f"date: {date.strftime('%Y-%m-%d %H:%M:%S')} +0900",
+        f"categories: [{cats_yaml}]",
+    ]
+    if image_path:
+        lines.append(f"image: {image_path}")
+    lines.append(f'source: "{original_url}"')
+    lines.append("---")
+    return "\n".join(lines) + "\n"
 
 def sanitize_filename(s):
     return re.sub(r"[^a-z0-9\-]+","-", slugify(s)).strip("-")
@@ -138,7 +207,7 @@ def main():
                      .astimezone(datetime.timezone(datetime.timedelta(hours=9)))
 
             summary = e.get("summary", "")
-            cats = guess_categories(title, summary)
+            cats = guess_categories(title, summary, entry=e, feed_url=feed_url)
 
             img_url = extract_main_image(e)
             image_path = None
@@ -159,13 +228,11 @@ def main():
 
             body = ""
             if image_path:
-                body += "{{ site.baseurl }}" + image_path  # Jekyllで展開されるbaseurl
-                body = "![記事イメージ](" + body + ")\n\n"
+                body += "![記事イメージ]({{ site.baseurl }}" + image_path + ")\n\n"
 
             if content_html:
                 body += "## 記事本文（自動抽出）\n" + content_html + "\n\n"
             body += f"[出典はこちら]({link})\n"
-
 
             post_path.parent.mkdir(parents=True, exist_ok=True)
             post_path.write_text(fm + "\n" + body, encoding="utf-8")
