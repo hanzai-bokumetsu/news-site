@@ -187,3 +187,23 @@ a:hover { opacity: .9; }
 /* 複数カテゴリバッジの並び安定用 */
 .meta-line { display:flex; flex-wrap:wrap; gap:8px; }
 .badge { display:inline-flex; align-items:center; height:24px; }
+
+.thumb-placeholder {
+  width: 120px;   /* 既存サムネのサイズに合わせて調整 */
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.75rem;
+  color: #fff;
+  border-radius: 8px;
+  background: #556;
+}
+
+.cat-犯罪 { background: crimson; }
+.cat-スポーツ { background: steelblue; }
+.cat-ニュース { background: #607d8b; }
+.cat-教員 { background: purple; }
+.cat-京都府 { background: seagreen; }
+.cat-大阪府 { background: teal; }
