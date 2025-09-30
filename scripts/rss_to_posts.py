@@ -153,6 +153,30 @@ def resolve_google_news_url(url: str) -> str:
         pass
     return url
 
+def _decode_html(response):
+    """HTMLを正しいエンコーディングで文字列化（<meta charset>を優先）"""
+    raw = response.content
+    # <meta charset="..."> / <meta http-equiv="Content-Type" ... charset=...>
+    m = re.search(br'<meta[^>]+charset=["\']?([a-zA-Z0-9_\-]+)', raw, re.I)
+    if not m:
+        m = re.search(br'charset=([a-zA-Z0-9_\-]+)', raw, re.I)
+    if m:
+        enc = m.group(1).decode(errors="ignore").lower()
+        try:
+            return raw.decode(enc, errors="replace")
+        except Exception:
+            pass
+    # 次善：requestsの推定 or サーバ宣言
+    enc = (getattr(response, "apparent_encoding", None) or response.encoding or "").lower()
+    if enc:
+        try:
+            return raw.decode(enc, errors="replace")
+        except Exception:
+            pass
+    # 最後の手段：UTF-8
+    return raw.decode("utf-8", errors="replace")
+
+
 def fetch_image(url):
     try:
         r = requests.get(url, timeout=IMG_TIMEOUT, headers=UA)
@@ -188,13 +212,20 @@ def extract_main_image(entry):
 def fetch_fulltext(url):
     try:
         # Google Newsの中間URLなら実記事URLへ
-        final_url = resolve_google_news_url(url)
+        final_url = resolve_google_news_url(url) if "news.google.com" in url else url
 
         r = requests.get(final_url, timeout=10, headers=UA)
         r.raise_for_status()
-        enc = (getattr(r, "apparent_encoding", None) or r.encoding or "").lower()
-        r.encoding = enc if enc else "utf-8"
-        html_text = r.text
+
+        html_text = _decode_html(r)
+
+        # ありがちな「UTF-8をLatin-1で読んだ」系のモジバケを簡易修正
+        # （「ã」「å」等が大量に出る場合はUTF-8で読み直す）
+        if html_text.count("ã") + html_text.count("å") > 20:
+            try:
+                html_text = r.content.decode("utf-8", errors="replace")
+            except Exception:
+                pass
 
         doc = Document(html_text)
         title = doc.short_title()
@@ -202,6 +233,7 @@ def fetch_fulltext(url):
         return title, content_html, final_url
     except Exception:
         return None, None, url
+
 
 
 def make_front_matter(title, date, categories, image_path, original_url):
