@@ -1,5 +1,3 @@
-
-
 import os, re, json, hashlib, datetime, pathlib, unicodedata
 import feedparser, requests
 from urllib.parse import urlparse
@@ -21,24 +19,23 @@ UA = {"User-Agent": "Mozilla/5.0"}
 IMG_TIMEOUT = 10
 
 FEEDS = [
+    # 大手ポータル
     "https://www3.nhk.or.jp/rss/news/cat0.xml",
     "https://news.yahoo.co.jp/rss/topics/domestic.xml",
     "https://news.yahoo.co.jp/rss/topics/world.xml",
     "https://news.yahoo.co.jp/rss/topics/local.xml",
     "https://news.yahoo.co.jp/rss/topics/sports.xml",
-    "https://www3.nhk.or.jp/rss/news/cat0.xml",
+
+    # 大手新聞社など
     "https://www.asahi.com/rss/asahi/newsheadlines.rdf",
     "https://mainichi.jp/rss/etc/mainichi-flash.rss",
     "https://www.yomiuri.co.jp/rss/edition/national/",
     "https://www.jiji.com/rss/rss.php?g=soc",
+
     # Google News（媒体横断）
     "https://news.google.com/rss?hl=ja&gl=JP&ceid=JP:ja",
     "https://news.google.com/rss/search?q=逮捕+OR+容疑+OR+事件&hl=ja&gl=JP&ceid=JP:ja",
     "https://news.google.com/rss/search?q=スポーツ&hl=ja&gl=JP&ceid=JP:ja",
-
-
-
-    
 ]
 
 CATEGORY_MAPPING = {
@@ -200,6 +197,36 @@ def _pick_publisher_url_from_gnews_html(html_text: str) -> str | None:
         return u2
     return _clean(candidates[0])
 
+def _pick_external_from_yahoo_pickup(html_text: str) -> str | None:
+    """
+    Yahoo!ニュース /pickup/ ページから「外部（非 yahoo.co.jp）記事URL」を推定して返す
+    """
+    try:
+        t = html.fromstring(html_text)
+    except Exception:
+        return None
+
+    areas = t.xpath('//*[@role="main"]') or [t]
+    bad_hosts = ("yahoo.co.jp", "yimg.jp", "yahooapis.jp")
+
+    for area in areas:
+        for href in area.xpath('.//a[@href]/@href'):
+            if not href.startswith("http"):
+                continue
+            host = urlparse(href).netloc.lower()
+            if any(b in host for b in bad_hosts):
+                continue
+            return href
+    # 最後の保険：全体から探索
+    for href in t.xpath('//a[@href]/@href'):
+        if not href.startswith("http"):
+            continue
+        host = urlparse(href).netloc.lower()
+        if any(b in host for b in bad_hosts):
+            continue
+        return href
+    return None
+
 # ==============================
 # 画像処理
 # ==============================
@@ -244,8 +271,8 @@ def extract_og_image(html_text: str) -> str | None:
         return None
 
 # ==============================
-# 本文取得（Google News解決込み）
-# 返り値: (title, content_html, final_url, ogimg)
+# 本文取得（Google News / Yahoo! pickup 解決込み）
+# 戻り値: (title, content_html, final_url, ogimg)
 # ==============================
 def fetch_fulltext(url):
     try:
@@ -254,18 +281,33 @@ def fetch_fulltext(url):
         final_url = r0.url
         ctype0 = r0.headers.get("Content-Type", "").lower()
 
-        # Google News 中継ページ → 配信社URLへ
+        # ---- Google News: 中継 → 配信社URLへ ----
         if "news.google.com" in final_url:
             html0 = _decode_html(r0)
-            external = _pick_publisher_url_from_gnews_html(html0)
-            if not external:
+            ext = _pick_publisher_url_from_gnews_html(html0)
+            if not ext:
                 return None, None, final_url, None
-            r1 = requests.get(external, timeout=10, headers=UA, allow_redirects=True)
+            r1 = requests.get(ext, timeout=10, headers=UA, allow_redirects=True)
             r1.raise_for_status()
             final_url = r1.url
             if "text/html" not in r1.headers.get("Content-Type","").lower():
                 return None, None, final_url, None
             html_text = _decode_html(r1)
+
+        # ---- Yahoo! /pickup/：外部記事URLに解決 ----
+        elif "news.yahoo.co.jp/pickup/" in final_url:
+            html0 = _decode_html(r0)
+            ext = _pick_external_from_yahoo_pickup(html0)
+            if not ext:
+                return None, None, final_url, None
+            r1 = requests.get(ext, timeout=10, headers=UA, allow_redirects=True)
+            r1.raise_for_status()
+            final_url = r1.url
+            if "text/html" not in r1.headers.get("Content-Type","").lower():
+                return None, None, final_url, None
+            html_text = _decode_html(r1)
+
+        # ---- 通常：HTMLページならそのまま抽出 ----
         else:
             if "text/html" not in ctype0:
                 return None, None, final_url, None
@@ -348,7 +390,7 @@ def main():
             summary = e.get("summary", "")
             cats = guess_categories(title, summary, entry=e, feed_url=feed_url)
 
-            # 画像：RSS → og:image → 本文内img
+            # 画像：RSS → og:image
             img_url = extract_main_image_from_entry(e) or ogimg
             image_path = fetch_image(img_url) if img_url else None
 
