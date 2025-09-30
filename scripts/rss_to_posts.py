@@ -1,3 +1,5 @@
+
+
 import os, re, json, hashlib, datetime, pathlib, unicodedata
 import feedparser, requests
 from urllib.parse import urlparse
@@ -24,10 +26,19 @@ FEEDS = [
     "https://news.yahoo.co.jp/rss/topics/world.xml",
     "https://news.yahoo.co.jp/rss/topics/local.xml",
     "https://news.yahoo.co.jp/rss/topics/sports.xml",
+    "https://www3.nhk.or.jp/rss/news/cat0.xml",
+    "https://www.asahi.com/rss/asahi/newsheadlines.rdf",
+    "https://mainichi.jp/rss/etc/mainichi-flash.rss",
+    "https://www.yomiuri.co.jp/rss/edition/national/",
+    "https://www.jiji.com/rss/rss.php?g=soc",
     # Google News（媒体横断）
     "https://news.google.com/rss?hl=ja&gl=JP&ceid=JP:ja",
     "https://news.google.com/rss/search?q=逮捕+OR+容疑+OR+事件&hl=ja&gl=JP&ceid=JP:ja",
     "https://news.google.com/rss/search?q=スポーツ&hl=ja&gl=JP&ceid=JP:ja",
+
+
+
+    
 ]
 
 CATEGORY_MAPPING = {
