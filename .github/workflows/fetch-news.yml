@@ -2,21 +2,26 @@ name: Fetch & Post News
 
 on:
   schedule:
-    # JST 09:00 / 15:00 / 21:00（GitHubはUTC）
-    - cron: "0 0,6,12 * * *"
+    - cron: "3 * * * *"   # 毎時00分（UTC）。JSTでも毎時ちょうどに実行される
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: fetch-and-post-news
+  cancel-in-progress: true
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # rebaseに必要
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,37 +31,25 @@ jobs:
       - name: Install Python packages
         run: |
           python -m pip install --upgrade pip
-          pip install feedparser requests python-slugify pyyaml readability-lxml lxml
+          pip install feedparser requests python-slugify readability-lxml lxml
 
       - name: Run fetcher
         env:
           TZ: Asia/Tokyo
         run: python scripts/rss_to_posts.py
 
-      - name: Sync category pages
-        run: python scripts/sync_categories.py
-
-
       - name: Commit & push if changed
         run: |
           set -e
           git config user.name "news-bot"
           git config user.email "actions@users.noreply.github.com"
-
           git add -A
           if git diff --cached --quiet; then
-           echo "No changes to commit."
-           exit 0
+            echo "No changes to commit."
+            exit 0
           fi
-
-          # まずコミット
+          # なるべく安全に最新取り込み→push
+          git pull --rebase origin "${GITHUB_REF_NAME:-main}" || true
           git commit -m "chore: auto-post from RSS [skip ci]"
-
-          # その上で最新を取り込み（作業ツリーを自動一時退避）
-          git pull --rebase --autostash origin "${{ github.ref_name }}" || true
-
-          # プッシュ（先に通常、ダメなら lease 付き強制）
-          git push origin HEAD:"${{ github.ref_name }}" || \
-          git push --force-with-lease origin HEAD:"${{ github.ref_name }}"
-
-
+          git push origin HEAD:"${GITHUB_REF_NAME:-main}" || \
+            git push --force-with-lease origin HEAD:"${GITHUB_REF_NAME:-main}"
