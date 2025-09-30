@@ -177,6 +177,82 @@ def _decode_html(response):
     return raw.decode("utf-8", errors="replace")
 
 
+def _fallback_extract_title_content(html_text: str):
+    """
+    Readabilityが短すぎる/失敗した時のフォールバック：
+    og:title / og:description / <article> などから簡易抽出
+    """
+    try:
+        t = html.fromstring(html_text)
+    except Exception:
+        return None, None
+
+    # タイトル候補
+    ogt = t.xpath('//meta[@property="og:title"]/@content')
+    twt = t.xpath('//meta[@name="twitter:title"]/@content')
+    h1  = t.xpath('//h1//text()')
+    title = (ogt[0] if ogt else (twt[0] if twt else ("".join(h1).strip() if h1 else None)))
+
+    # 本文候補
+    # 1) <article> のテキスト
+    arts = t.xpath('//article')
+    body = None
+    if arts:
+        body = "\n".join(a.text_content().strip() for a in arts if a.text_content()).strip()
+
+    # 2) だめなら og:description
+    if not body:
+        ogd = t.xpath('//meta[@property="og:description"]/@content')
+        if ogd:
+            body = ogd[0].strip()
+
+    if body:
+        # 軽く整形（長すぎる改行などを圧縮）
+        body = re.sub(r'\n{3,}', '\n\n', body)
+
+    return title, body
+
+
+
+def _pick_publisher_url_from_gnews_html(html_text: str) -> str | None:
+    """
+    Google News 記事ページのHTMLから、配信社（google以外）の本文URLを推定して返す。
+    画像・トラッキング等は除外。最初に見つかった有力候補を返す。
+    """
+    # 1) すべての http(s) リンクを収集
+    hrefs = re.findall(r'href="(https?://[^"]+)"', html_text, flags=re.I)
+
+    if not hrefs:
+        return None
+
+    # 2) 候補をフィルタ：google系/gstatic系/画像拡張子は除外
+    bad_domains = ("google.com", "news.google.com", "gstatic.com", "googleusercontent.com")
+    bad_exts = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".avif")
+    candidates = []
+    for u in hrefs:
+        lu = u.lower()
+        if any(b in lu for b in bad_domains):
+            continue
+        if any(lu.split("?")[0].endswith(ext) for ext in bad_exts):
+            continue
+        candidates.append(u)
+
+    if not candidates:
+        return None
+
+    # 3) AMPや余計なクエリを軽く掃除（できる範囲で）
+    def _clean(u: str) -> str:
+        # AMPのときは通常版に寄せる（例: amp. → www.）
+        u2 = re.sub(r"//amp\.", "//www.", u)
+        # よくあるトラッキングを削る（残っても動くが短くする）
+        u2 = re.sub(r"[?&](utm_[^=&]+|gclid|fbclid)=[^&]+", "", u2)
+        return u2
+
+    # 4) 最初の候補を採用（必要に応じてスコアリング強化可）
+    return _clean(candidates[0])
+
+
+
 def fetch_image(url):
     try:
         r = requests.get(url, timeout=IMG_TIMEOUT, headers=UA)
@@ -211,26 +287,55 @@ def extract_main_image(entry):
 
 def fetch_fulltext(url):
     try:
-        # まずはリダイレクトを正しく辿って最終URLを得る
+        # 最初にURLへアクセス（HTTPリダイレクトは自動追跡）
         r0 = requests.get(url, timeout=10, headers=UA, allow_redirects=True)
         r0.raise_for_status()
         final_url = r0.url
-
-        # 画像など text/html 以外に飛んだ場合は本文抽出を諦める
         ctype0 = r0.headers.get("Content-Type", "").lower()
-        if "text/html" not in ctype0:
-            return None, None, final_url
 
-        # 本文取得（最終URLに対して再取得でもOKだが、r0をそのまま使って良い）
-        r = r0
-        html_text = _decode_html(r)
+        # Google News ページに着地した場合は、HTMLをパースして配信社URLに解決
+        if "news.google.com" in final_url:
+            html0 = _decode_html(r0)
+            external = _pick_publisher_url_from_gnews_html(html0)
+            if external:
+                r1 = requests.get(external, timeout=10, headers=UA, allow_redirects=True)
+                r1.raise_for_status()
+                ct1 = r1.headers.get("Content-Type", "").lower()
+                if "text/html" in ct1:
+                    final_url = r1.url
+                    html_text = _decode_html(r1)
+                else:
+                    # 非HTML（画像等）なら本文抽出は諦める
+                    return None, None, external
+            else:
+                # 解決できなければ GNews 本文を最低限表示
+                html_text = html0
+        else:
+            # 直で配信社に着地した場合
+            if "text/html" not in ctype0:
+                return None, None, final_url
+            html_text = _decode_html(r0)
 
+        # Readability で抽出
         doc = Document(html_text)
-        title = doc.short_title()
+        title = (doc.short_title() or "").strip()
         content_html = doc.summary(html_partial=True)
-        return title, content_html, final_url
+
+        # フォールバック：短すぎる場合（≒要約しか取れない）
+        plain = re.sub(r"<[^>]+>", "", content_html or "").strip()
+        if len(plain) < 180:
+            fb_title, fb_body = _fallback_extract_title_content(html_text)
+            if fb_title and (not title or title.lower() == "google news"):
+                title = fb_title
+            if fb_body and not plain:
+                # 簡易本文をMarkdownに
+                content_html = "<p>" + fb_body.replace("\n", "<br>") + "</p>"
+
+        return (title or None), (content_html or None), final_url
+
     except Exception:
         return None, None, url
+
 
 
 
@@ -283,7 +388,12 @@ def main():
                 image_path = fetch_image(img_url)
 
             full_title, content_html, final_url = fetch_fulltext(link)
-            if full_title and len(full_title) > 8:
+
+            # GNewsのままで本文も無い場合は作らない
+            if (not content_html) and ("news.google.com" in final_url.lower()):
+                continue
+
+            if full_title and len(full_title) > 8 and full_title.lower() != "google news":
                 title = full_title
 
 
