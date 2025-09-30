@@ -75,19 +75,48 @@ FEED_DEFAULTS = {
 }
 
 # ==============================
-# 永続データ（既読管理）: by_url / by_sha の二軸で重複判定
+# 既存ポストのインデックス化（起動時1回）
+# ==============================
+def build_posts_index():
+    idx = {"by_url": {}, "by_sha": {}}
+    for p in POSTS.glob("*.md"):
+        try:
+            txt = p.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        m = re.match(r"^---\n(.*?)\n---", txt, flags=re.S)
+        if not m:
+            continue
+        fm = m.group(1)
+        def _get(key):
+            r = re.search(rf"^{key}:\s*\"?([^\n\"]+)\"?", fm, flags=re.M)
+            return r.group(1).strip() if r else ""
+        cu = normalize_url(_get("canonical_url") or _get("source_url"))
+        sh = (_get("content_sha") or "").strip()
+        meta = {"path": str(p)}
+        if cu: idx["by_url"][cu] = meta
+        if sh: idx["by_sha"][sh] = meta
+    return idx
+
+# ==============================
+# 永続データ（既読管理）
 # ==============================
 def load_seen():
     f = DB / "seen.json"
+    base = {"by_url": {}, "by_sha": {}}
     if f.exists():
         try:
             d = json.loads(f.read_text(encoding="utf-8"))
-            if isinstance(d, dict) and ("by_url" in d or "by_sha" in d):
-                return d
-            # 後方互換（旧形式だった場合は空で再構築）
+            if isinstance(d, dict):
+                base["by_url"].update(d.get("by_url", {}))
+                base["by_sha"].update(d.get("by_sha", {}))
         except Exception:
             pass
-    return {"by_url": {}, "by_sha": {}}
+    # 既存_posts も学習
+    base_from_posts = build_posts_index()
+    base["by_url"].update(base_from_posts["by_url"])
+    base["by_sha"].update(base_from_posts["by_sha"])
+    return base
 
 def save_seen(d):
     (DB / "seen.json").write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -119,25 +148,37 @@ def normalize_url(u: str) -> str:
     if not u:
         return ""
     p = urllib.parse.urlsplit(u)
-    # 追跡系クエリ除去
-    q = urllib.parse.parse_qsl(p.query, keep_blank_values=False)
-    drop_keys = {"utm_source","utm_medium","utm_campaign","utm_term","utm_content",
-                 "fbclid","gclid","igshid","mc_cid","mc_eid","yclid","ocid"}
-    q = [(k,v) for (k,v) in q if k.lower() not in drop_keys]
-    new = p._replace(query=urllib.parse.urlencode(q, doseq=True), fragment="")
+    # クエリは全部捨てる（媒体ごとの差分ノイズを排除）
+    new = p._replace(query="", fragment="")
     url = urllib.parse.urlunsplit(new)
-    # AMP → www 正規化（よくある）
+    # AMP → www
     url = re.sub(r"//amp\.", "//www.", url)
-    # 拡張子無しなら末尾スラッシュを付与
+    # 拡張子無しなら末尾スラッシュ
     if not re.search(r"\.(html?|xml|jpg|jpeg|png|gif|webp|pdf)(\?|$)", url, re.I) and not url.endswith("/"):
         url += "/"
     return url
 
+# 本文ノイズ（更新◯分前・関連記事等）を除去して安定化
+_NOISE_PAT = re.compile(
+    r"""(?ix)
+        (?:
+            \d{1,2}:\d{2}                    # 時刻
+          | \d{4}[./-]\d{1,2}[./-]\d{1,2}    # 日付
+          | 更新 \d+ (?:分|時間) 前?
+          | 関連記事|おすすめ|こちらも?おすすめ|広告|PR
+        )
+    """
+)
+def _denoise_text(txt: str) -> str:
+    t = re.sub(r"<[^>]+>", "", txt or "")
+    t = normalize_text(t)
+    t = _NOISE_PAT.sub("", t)
+    t = re.sub(r"\s+", " ", t).strip()
+    return t
+
 def fingerprint(title: str, html_body: str) -> str:
     t = normalize_text((title or "")).strip()
-    # HTML を素のテキストにして前方 1500 文字で判別
-    plain = re.sub(r"<[^>]+>", "", html_body or "")
-    plain = normalize_text(plain).strip()[:1500]
+    plain = _denoise_text(html_body)[:1500]
     return hashlib.sha256((t + "\n" + plain).encode("utf-8", "ignore")).hexdigest()
 
 def guess_categories(title, summary, entry=None, feed_url=None):
@@ -417,6 +458,9 @@ def main():
     now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
     new_count = 0
 
+    # 同一ラン内のフィード横断重複を抑止
+    run_guard = set()  # {(host, title_norm)}
+
     for feed_url in FEEDS:
         d = feedparser.parse(feed_url)
         for e in d.entries:
@@ -424,7 +468,6 @@ def main():
             if not raw_link:
                 continue
 
-            # 本文抽出（最終URLに解決）
             full_title, content_html, final_url, ogimg, canon = fetch_fulltext(raw_link)
 
             # 本文なし or 依然として Google News のまま → スキップ
@@ -433,18 +476,27 @@ def main():
 
             # URL正規化 & canonical 優先
             n_final = normalize_url(final_url)
-            canon_url = canon or n_final
+            canon_url = normalize_url(canon or n_final)
 
             # タイトル（本文側がまともなら優先）
             rss_title = (e.get("title") or "").strip()
             title = full_title if (full_title and len(full_title) > 8 and full_title.lower() != "google news") else rss_title
 
-            # 指紋（内容ハッシュ）
+            # ラン内ガード（同ホスト×同タイトル）
+            try:
+                host = urllib.parse.urlsplit(canon_url or n_final).netloc
+            except Exception:
+                host = ""
+            key_inrun = (host, normalize_text(title))
+            if key_inrun in run_guard:
+                continue
+            run_guard.add(key_inrun)
+
+            # 指紋（内容ハッシュ・ノイズ除去版）
             content_sha = fingerprint(title, content_html)
 
             # 重複チェック（URL or 内容）
             if already_seen(seen, canon_url, content_sha):
-                # すでに登録済み
                 continue
 
             # 公開日時
@@ -481,7 +533,7 @@ def main():
                 date=dt,
                 categories=cats,
                 image_path=image_path,
-                source_url=final_url,
+                source_url=n_final,
                 canonical_url=canon_url,
                 content_sha=content_sha
             )
@@ -490,21 +542,22 @@ def main():
             if image_path:
                 body += "![記事イメージ]({{ site.baseurl }}" + image_path + ")\n\n"
             body += "## 記事本文（自動抽出）\n" + (content_html or "") + "\n\n"
-            body += f"[出典はこちら]({final_url})\n"
+            body += f"[出典はこちら]({n_final})\n"
 
             post_path.parent.mkdir(parents=True, exist_ok=True)
             post_path.write_text(fm + "\n" + body, encoding="utf-8")
 
-            # 既読登録（URL & 内容）
+            # 既読登録（都度保存して途中停止でも効果が残る）
             mark_seen(seen, canon_url, content_sha, {
                 "title": title,
                 "path": str(post_path.relative_to(BASE)),
                 "date": dt.isoformat(),
-                "link": final_url
+                "link": n_final
             })
+            save_seen(seen)
+
             new_count += 1
 
-    save_seen(seen)
     print(f"Created {new_count} posts.")
 
 if __name__ == "__main__":
