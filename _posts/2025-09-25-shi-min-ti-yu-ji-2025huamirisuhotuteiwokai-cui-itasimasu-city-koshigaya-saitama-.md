@@ -1,8 +1,0 @@
----
-title: "市民体育祭2025ファミリースポーツデイを開催いたします！ - city.koshigaya.saitama.jp"
-date: 2025-09-25 16:00:00 +0900
-categories: ["スポーツ"]
-source: "https://www.google-analytics.com/analytics.js"
----
-
-[出典はこちら](https://www.google-analytics.com/analytics.js)
