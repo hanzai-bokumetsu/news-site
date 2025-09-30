@@ -1,0 +1,16 @@
+---
+title: "エッセンシャルワーカー年収100万円差 年齢で拡大、労働経済白書"
+date: 2025-09-30 17:40:37 +0900
+categories: ["ニュース"]
+image: /assets/img/76816fb8ab7fbcb6.jpg
+source_url: "https://www.asahi.com/articles/AST9Z0TN3T9ZULFA03JM.html"
+canonical_url: "https://www.asahi.com/articles/AST9Z0TN3T9ZULFA03JM.html"
+content_sha: "ef22627ef160330912dac94bb4a0a036e2bd871ffb9d22bfc9d2ea93f1859bce"
+---
+
+![記事イメージ]({{ site.baseurl }}/assets/img/76816fb8ab7fbcb6.jpg)
+
+## 記事本文（自動抽出）
+<div><main role="main" id="main"><p></p><div class="y_Qv3"><h1>エッセンシャルワーカー年収100万円差　年齢で拡大、労働経済白書</h1><div class="mhPng"><p><span class="fNPYU Q_Shz"><a href="//www.asahi.com/news/gold.html?iref=com_gold">有料記事</a></span></p><span class="H8KYB">宮川純一</span><span class="UDj4P"><time datetime="2025-09-30T08:40:37.000Z">2025年9月30日 17時40分</time></span></div></div><p id="gsm_above_SnsUtilityArea"></p><p x-component-name="CommentHeadline" x-component-data='{"commentCount":0,"commentators":[],"mode":"pc"}'></p><div class="nfyQp"><p>　いわゆるエッセンシャルワーカーの<a href="//www.asahi.com/topics/word/%E5%B9%B3%E5%9D%87%E8%B3%83%E9%87%91.html" title="平均賃金 のトピックスを開く" class="eWgMZ">平均賃金</a>はそれ例外の職種と比べて100万円低く、50代後半では200万円差が開いている――。<a href="//www.asahi.com/topics/word/%E5%8E%9A%E7%94%9F%E5%8A%B4%E5%83%8D%E7%9C%81.html" title="厚生労働省 のトピックスを開く" class="eWgMZ">厚生労働省</a>が30日に公表した2025年版「労働経済の分析（労働<a href="//www.asahi.com/topics/word/%E7%B5%8C%E6%B8%88%E7%99%BD%E6%9B%B8.html" title="経済白書 のトピックスを開く" class="eWgMZ">経済白書</a>）」にこうした調査結果がまとめられた。エッセンシャルワーカーらを対象にしたこうした政府の調査は初めてという。</p><p>　労働経済白書は、経済や雇用、労働時間などの現状や課題について統計データを使って分析したもので、毎年公表されている。今年は、人手不足に関する分析に重点が置かれ、中でも生活に直結し不足すると<a href="//www.asahi.com/topics/word/%E7%94%9F%E6%B4%BB%E3%81%AE%E8%B3%AA.html" title="生活の質 のトピックスを開く" class="eWgMZ">生活の質</a>が低下し、経済活動に影響する、職種に注目した。</p><p>　エッセンシャルワーカーを医療・福祉、運輸・建設、接客・調理などの職種を「社会インフラ関連職」と定義。就業者全体の35%を占める約2200万人を対象とした。</p><h2 class="smgSC">年収100万円の差、50代後半では200万円</h2><p>　23年の賃金構造基本統計調査を元に、収入を分析。社会インフラ関連職の平均の年間所得は436.1万円で、それ以外の職種の540.6万円と比べ104.5万円低かった。月給は社会インフラ関連は32万円で、それ以外の36万円から5万円低く、<a href="//www.asahi.com/topics/word/%E3%83%9C%E3%83%BC%E3%83%8A%E3%82%B9.html" title="ボーナス のトピックスを開く" class="eWgMZ">ボーナス</a>など年間の特別給与は57万円で、それ以外の107万円より50万円低かった。</p><p class="Lujdo">　年齢に応じた賃金上昇が小さ…</p></div><p></p><div class="NbZMW"><div class="PxAm1"><p>この記事は</p><img src="//www.asahicom.jp/images/icon_key_gold.png" alt><a href="//www.asahi.com/news/gold.html?iref=com_1kiji_g_0">有料記事</a><p>です。</p><span class="Zgt88">残り<b>226</b>文字</span><span class="hideFromApp">有料会員になると続きをお読みいただけます。</span></div><p class="eQShK">※無料期間中に解約した場合、料金はかかりません</p></div><p x-component-name="WriterProfile" x-component-data='{"writerProfile":{"writerProfileList":[],"isWriterFollowAvailableMember":false},"isFreeArea":true}'></p><p x-component-name="ArticleCommentList" x-component-data='{"commentCount":0,"commentList":[],"shareUrlBase":"https://www.asahi.com/articles/AST9Z0TN3T9ZULFA03JM.html","articleId":"AST9Z0TN3T9ZULFA03JM","commentIdParam":"","equalCommentIdIndex":-1,"isAuthorized":false,"isFreePlan":false,"isPaidMember":false,"isPresent":false,"isHazard":false,"freeUrlBase":"//www.asahi.com","digitalUrlBase":"//digital.asahi.com"}'></p></main></div>
+
+[出典はこちら](https://www.asahi.com/articles/AST9Z0TN3T9ZULFA03JM.html)
