@@ -1,8 +1,8 @@
-import os, re, json, hashlib, datetime, pathlib, unicodedata, urllib.parse, time
+import os, re, json, hashlib, datetime, pathlib, unicodedata
 import feedparser, requests
 from urllib.parse import urlparse
 from slugify import slugify
-from lxml import html as lxml_html
+from lxml import html
 from readability import Document
 
 # ==============================
@@ -75,36 +75,16 @@ FEED_DEFAULTS = {
 }
 
 # ==============================
-# 永続データ（既読管理）: by_url / by_sha の二軸で重複判定
+# 永続データ（既読管理）
 # ==============================
 def load_seen():
     f = DB / "seen.json"
     if f.exists():
-        try:
-            d = json.loads(f.read_text(encoding="utf-8"))
-            if isinstance(d, dict) and ("by_url" in d or "by_sha" in d):
-                return d
-            # 後方互換（旧形式だった場合は空で再構築）
-        except Exception:
-            pass
-    return {"by_url": {}, "by_sha": {}}
+        return json.loads(f.read_text(encoding="utf-8"))
+    return {}
 
 def save_seen(d):
     (DB / "seen.json").write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
-
-def already_seen(seen, canon_url: str, sha: str) -> bool:
-    if canon_url and canon_url in seen["by_url"]:
-        return True
-    if sha and sha in seen["by_sha"]:
-        return True
-    return False
-
-def mark_seen(seen, canon_url: str, sha: str, meta: dict):
-    ts = int(time.time())
-    if canon_url:
-        seen["by_url"][canon_url] = {"ts": ts, **meta}
-    if sha:
-        seen["by_sha"][sha] = {"ts": ts, **meta}
 
 # ==============================
 # ユーティリティ
@@ -114,31 +94,6 @@ def normalize_text(s: str) -> str:
 
 def sanitize_filename(s: str) -> str:
     return re.sub(r"[^a-z0-9\-]+","-", slugify(s or "")).strip("-")
-
-def normalize_url(u: str) -> str:
-    if not u:
-        return ""
-    p = urllib.parse.urlsplit(u)
-    # 追跡系クエリ除去
-    q = urllib.parse.parse_qsl(p.query, keep_blank_values=False)
-    drop_keys = {"utm_source","utm_medium","utm_campaign","utm_term","utm_content",
-                 "fbclid","gclid","igshid","mc_cid","mc_eid","yclid","ocid"}
-    q = [(k,v) for (k,v) in q if k.lower() not in drop_keys]
-    new = p._replace(query=urllib.parse.urlencode(q, doseq=True), fragment="")
-    url = urllib.parse.urlunsplit(new)
-    # AMP → www 正規化（よくある）
-    url = re.sub(r"//amp\.", "//www.", url)
-    # 拡張子無しなら末尾スラッシュを付与
-    if not re.search(r"\.(html?|xml|jpg|jpeg|png|gif|webp|pdf)(\?|$)", url, re.I) and not url.endswith("/"):
-        url += "/"
-    return url
-
-def fingerprint(title: str, html_body: str) -> str:
-    t = normalize_text((title or "")).strip()
-    # HTML を素のテキストにして前方 1500 文字で判別
-    plain = re.sub(r"<[^>]+>", "", html_body or "")
-    plain = normalize_text(plain).strip()[:1500]
-    return hashlib.sha256((t + "\n" + plain).encode("utf-8", "ignore")).hexdigest()
 
 def guess_categories(title, summary, entry=None, feed_url=None):
     cats = set()
@@ -173,7 +128,7 @@ def guess_categories(title, summary, entry=None, feed_url=None):
     if not cats:
         cats.add("ニュース")
 
-    return sorted(list(cats))
+    return list(cats)
 
 # ==============================
 # HTML処理
@@ -198,7 +153,7 @@ def _decode_html(response: requests.Response) -> str:
 
 def _fallback_extract_title_content(html_text: str):
     try:
-        t = lxml_html.fromstring(html_text)
+        t = html.fromstring(html_text)
     except Exception:
         return None, None
 
@@ -220,17 +175,6 @@ def _fallback_extract_title_content(html_text: str):
 
     return title, body
 
-def _extract_canonical_from_html(html_text: str, base_url: str) -> str:
-    try:
-        t = lxml_html.fromstring(html_text)
-        link = t.xpath('//link[@rel="canonical"]/@href')
-        if link:
-            can = urllib.parse.urljoin(base_url, link[0])
-            return normalize_url(can)
-    except Exception:
-        pass
-    return ""
-
 def _pick_publisher_url_from_gnews_html(html_text: str) -> str | None:
     hrefs = re.findall(r'href="(https?://[^"]+)"', html_text, flags=re.I)
     if not hrefs:
@@ -249,13 +193,16 @@ def _pick_publisher_url_from_gnews_html(html_text: str) -> str | None:
         return None
     def _clean(u: str) -> str:
         u2 = re.sub(r"//amp\.", "//www.", u)
-        u2 = re.sub(r"[?&](utm_[^=&]+|gclid|fbclid|yclid|ocid)=[^&]+", "", u2)
+        u2 = re.sub(r"[?&](utm_[^=&]+|gclid|fbclid)=[^&]+", "", u2)
         return u2
     return _clean(candidates[0])
 
 def _pick_external_from_yahoo_pickup(html_text: str) -> str | None:
+    """
+    Yahoo!ニュース /pickup/ ページから「外部（非 yahoo.co.jp）記事URL」を推定して返す
+    """
     try:
-        t = lxml_html.fromstring(html_text)
+        t = html.fromstring(html_text)
     except Exception:
         return None
 
@@ -270,6 +217,7 @@ def _pick_external_from_yahoo_pickup(html_text: str) -> str | None:
             if any(b in host for b in bad_hosts):
                 continue
             return href
+    # 最後の保険：全体から探索
     for href in t.xpath('//a[@href]/@href'):
         if not href.startswith("http"):
             continue
@@ -307,7 +255,7 @@ def extract_main_image_from_entry(entry):
                 if l.get("href"): return l["href"]
     html_snip = entry.get("summary", "") or entry.get("content",[{"value":""}])[0]["value"]
     try:
-        tree = lxml_html.fromstring(html_snip)
+        tree = html.fromstring(html_snip)
         imgs = tree.xpath("//img/@src")
         if imgs: return imgs[0]
     except Exception:
@@ -316,7 +264,7 @@ def extract_main_image_from_entry(entry):
 
 def extract_og_image(html_text: str) -> str | None:
     try:
-        t = lxml_html.fromstring(html_text)
+        t = html.fromstring(html_text)
         og = t.xpath('//meta[@property="og:image"]/@content')
         return og[0] if og else None
     except Exception:
@@ -324,7 +272,7 @@ def extract_og_image(html_text: str) -> str | None:
 
 # ==============================
 # 本文取得（Google News / Yahoo! pickup 解決込み）
-# 戻り値: (title, content_html, final_url, ogimg, canonical_url)
+# 戻り値: (title, content_html, final_url, ogimg)
 # ==============================
 def fetch_fulltext(url):
     try:
@@ -338,12 +286,12 @@ def fetch_fulltext(url):
             html0 = _decode_html(r0)
             ext = _pick_publisher_url_from_gnews_html(html0)
             if not ext:
-                return None, None, final_url, None, ""
+                return None, None, final_url, None
             r1 = requests.get(ext, timeout=10, headers=UA, allow_redirects=True)
             r1.raise_for_status()
             final_url = r1.url
             if "text/html" not in r1.headers.get("Content-Type","").lower():
-                return None, None, final_url, None, ""
+                return None, None, final_url, None
             html_text = _decode_html(r1)
 
         # ---- Yahoo! /pickup/：外部記事URLに解決 ----
@@ -351,18 +299,18 @@ def fetch_fulltext(url):
             html0 = _decode_html(r0)
             ext = _pick_external_from_yahoo_pickup(html0)
             if not ext:
-                return None, None, final_url, None, ""
+                return None, None, final_url, None
             r1 = requests.get(ext, timeout=10, headers=UA, allow_redirects=True)
             r1.raise_for_status()
             final_url = r1.url
             if "text/html" not in r1.headers.get("Content-Type","").lower():
-                return None, None, final_url, None, ""
+                return None, None, final_url, None
             html_text = _decode_html(r1)
 
         # ---- 通常：HTMLページならそのまま抽出 ----
         else:
             if "text/html" not in ctype0:
-                return None, None, final_url, None, ""
+                return None, None, final_url, None
             html_text = _decode_html(r0)
 
         # Readability
@@ -380,17 +328,16 @@ def fetch_fulltext(url):
                 content_html = "<p>" + fb_body.replace("\n", "<br>") + "</p>"
 
         ogimg = extract_og_image(html_text)
-        canon = _extract_canonical_from_html(html_text, final_url)
-        return (title or None), (content_html or None), final_url, ogimg, canon
+        return (title or None), (content_html or None), final_url, ogimg
 
     except Exception:
-        return None, None, url, None, ""
+        return None, None, url, None
 
 # ==============================
 # Front matter
 # ==============================
-def make_front_matter(title, date, categories, image_path, source_url, canonical_url, content_sha):
-    cats_yaml = ", ".join([f'"{c}"' for c in categories])
+def make_front_matter(title, date, categories, image_path, original_url):
+    cats_yaml = ", ".join([f'"{c}"' for c in sorted(categories)])
     safe_title = (title or "").replace('"', '\\"')
     lines = [
         "---",
@@ -400,12 +347,7 @@ def make_front_matter(title, date, categories, image_path, source_url, canonical
     ]
     if image_path:
         lines.append(f"image: {image_path}")
-    if source_url:
-        lines.append(f'source_url: "{source_url}"')
-    if canonical_url:
-        lines.append(f'canonical_url: "{canonical_url}"')
-    if content_sha:
-        lines.append(f'content_sha: "{content_sha}"')
+    lines.append(f'source: "{original_url}"')
     lines.append("---")
     return "\n".join(lines) + "\n"
 
@@ -420,42 +362,29 @@ def main():
     for feed_url in FEEDS:
         d = feedparser.parse(feed_url)
         for e in d.entries:
-            raw_link = (e.get("link") or "").strip()
-            if not raw_link:
-                continue
+            raw_uid = e.get("id") or e.get("link") or hashlib.sha1((e.get("title","")).encode()).hexdigest()
+
+            title = (e.get("title") or "").strip()
+            link  = (e.get("link")  or "").strip()
 
             # 本文抽出（最終URLに解決）
-            full_title, content_html, final_url, ogimg, canon = fetch_fulltext(raw_link)
+            full_title, content_html, final_url, ogimg = fetch_fulltext(link)
 
             # 本文なし or 依然として Google News のまま → スキップ
             if (not content_html) or ("news.google.com" in (final_url or "").lower()):
                 continue
 
-            # URL正規化 & canonical 優先
-            n_final = normalize_url(final_url)
-            canon_url = canon or n_final
-
-            # タイトル（本文側がまともなら優先）
-            rss_title = (e.get("title") or "").strip()
-            title = full_title if (full_title and len(full_title) > 8 and full_title.lower() != "google news") else rss_title
-
-            # 指紋（内容ハッシュ）
-            content_sha = fingerprint(title, content_html)
-
-            # 重複チェック（URL or 内容）
-            if already_seen(seen, canon_url, content_sha):
-                # すでに登録済み
+            # 最終URLで重複判定（同じ記事の多重取得を防ぐ）
+            uid = hashlib.sha1((final_url or raw_uid).encode()).hexdigest()
+            if uid in seen:
                 continue
 
             # 公開日時
             published = e.get("published_parsed") or e.get("updated_parsed")
             dt = now
             if published:
-                try:
-                    dt = datetime.datetime(*published[:6], tzinfo=datetime.timezone.utc)\
-                            .astimezone(datetime.timezone(datetime.timedelta(hours=9)))
-                except Exception:
-                    pass
+                dt = datetime.datetime(*published[:6], tzinfo=datetime.timezone.utc)\
+                        .astimezone(datetime.timezone(datetime.timedelta(hours=9)))
 
             # カテゴリ推定
             summary = e.get("summary", "")
@@ -465,43 +394,34 @@ def main():
             img_url = extract_main_image_from_entry(e) or ogimg
             image_path = fetch_image(img_url) if img_url else None
 
-            # ファイル作成（同日スラッグ衝突回避）
-            slug_base = sanitize_filename(title)[:80] or hashlib.sha1(title.encode()).hexdigest()[:10]
-            slug = slug_base
-            post_path = (POSTS / f"{dt.strftime('%Y-%m-%d')}-{slug}.md")
-            i = 0
-            while post_path.exists():
-                i += 1
-                suffix = hashlib.sha1(f"{slug_base}-{i}".encode()).hexdigest()[:6]
-                slug = f"{slug_base}-{suffix}"
-                post_path = (POSTS / f"{dt.strftime('%Y-%m-%d')}-{slug}.md")
+            # タイトルは本文側を優先（まともに取れていれば）
+            if full_title and len(full_title) > 8 and full_title.lower() != "google news":
+                title = full_title
 
-            fm = make_front_matter(
-                title=title,
-                date=dt,
-                categories=cats,
-                image_path=image_path,
-                source_url=final_url,
-                canonical_url=canon_url,
-                content_sha=content_sha
-            )
+            # ファイル作成
+            slug = sanitize_filename(title)[:80] or hashlib.sha1(title.encode()).hexdigest()[:10]
+            post_path = (BASE / "_posts" / f"{dt.strftime('%Y-%m-%d')}-{slug}.md")
+            if post_path.exists():
+                slug = f"{slug}-{hashlib.sha1(uid.encode()).hexdigest()[:6]}"
+                post_path = (BASE / "_posts" / f"{dt.strftime('%Y-%m-%d')}-{slug}.md")
+
+            fm = make_front_matter(title, dt, cats, image_path, final_url)
 
             body = ""
             if image_path:
                 body += "![記事イメージ]({{ site.baseurl }}" + image_path + ")\n\n"
-            body += "## 記事本文（自動抽出）\n" + (content_html or "") + "\n\n"
+            body += "## 記事本文（自動抽出）\n" + content_html + "\n\n"
             body += f"[出典はこちら]({final_url})\n"
 
             post_path.parent.mkdir(parents=True, exist_ok=True)
             post_path.write_text(fm + "\n" + body, encoding="utf-8")
 
-            # 既読登録（URL & 内容）
-            mark_seen(seen, canon_url, content_sha, {
+            seen[uid] = {
                 "title": title,
                 "path": str(post_path.relative_to(BASE)),
                 "date": dt.isoformat(),
                 "link": final_url
-            })
+            }
             new_count += 1
 
     save_seen(seen)
