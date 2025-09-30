@@ -2,7 +2,7 @@ name: Fetch & Post News
 
 on:
   schedule:
-    - cron: "0 * * * *"   # 毎時00分（UTC）。JSTでも毎時ちょうどに実行される
+    - cron: "3 * * * *"   # 毎時00分（UTC）。JSTでも毎時ちょうどに実行される
   workflow_dispatch:
 
 permissions:
