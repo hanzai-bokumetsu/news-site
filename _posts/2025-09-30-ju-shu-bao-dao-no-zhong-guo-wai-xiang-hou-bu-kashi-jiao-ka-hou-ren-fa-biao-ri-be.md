@@ -1,0 +1,16 @@
+---
+title: "拘束報道の「中国外相候補」が失脚か、後任発表 日本とも接点"
+date: 2025-09-30 21:16:07 +0900
+categories: ["ニュース"]
+image: /assets/img/f8f1b78552778dd4.jpg
+source_url: "https://www.asahi.com/articles/AST9Z40W1T9ZUHBI02HM.html"
+canonical_url: "https://www.asahi.com/articles/AST9Z40W1T9ZUHBI02HM.html"
+content_sha: "4447d23a654a39cd0a0b7b86b91dd3ed026f7ebed60996d4a1ce581eef3ad3c8"
+---
+
+![記事イメージ]({{ site.baseurl }}/assets/img/f8f1b78552778dd4.jpg)
+
+## 記事本文（自動抽出）
+<div><main role="main" id="main"><p></p><div class="y_Qv3"><h1>拘束報道の「中国外相候補」が失脚か、後任発表　日本とも接点</h1><p class="mhPng"><span class="H8KYB">北京=小早川遥平</span><span class="UDj4P"><time datetime="2025-09-30T12:16:07.000Z">2025年9月30日 21時16分</time></span></p></div><p id="gsm_above_SnsUtilityArea"></p><p x-component-name="CommentHeadline" x-component-data='{"commentCount":0,"commentators":[],"mode":"pc"}'></p><div class="nfyQp"><p>　<a href="//www.asahi.com/topics/word/%E4%B8%AD%E5%9B%BD%E5%85%B1%E7%94%A3%E5%85%9A.html" title="中国共産党 のトピックスを開く" class="eWgMZ">中国共産党</a>の外交部門、中央<a href="//www.asahi.com/topics/word/%E5%AF%BE%E5%A4%96%E9%80%A3%E7%B5%A1%E9%83%A8.html" title="対外連絡部 のトピックスを開く" class="eWgMZ">対外連絡部</a>の新しい部長に劉海星氏（62）が就いたことが30日、分かった。この職には次期外相候補と目されていた<a href="//www.asahi.com/topics/word/%E5%8A%89%E5%BB%BA%E8%B6%85.html" title="劉建超 のトピックスを開く" class="eWgMZ">劉建超</a>氏（61）が就いていたが、中国当局に拘束されて取り調べを受けていると8月に米紙が報じていた。</p><p>　同部のホームページ上で劉海星氏が部長として紹介された。劉建超氏の活動情報は7月30日を最後に途絶えており、失脚した可能性がある。劉建超氏は日本の政治家と面会する機会も多かった。</p><p id="_gtm_LastLine"></p></div><p></p><div class="NbZMW"><div class="PxAm1"><p>有料会員になると会員限定の<span>有料記事もお読みいただけます。</span></p></div><p class="eQShK">※無料期間中に解約した場合、料金はかかりません</p></div><div x-component-name="WriterProfile" x-component-data='{"writerProfile":{"writerProfileList":[{"name":"小早川遥平","code":"376d8fe3b04371efebc1bdceb2c31077edc2433d4b88f372c2a70ffa7101e647","department":"中国総局","role":"","specialtyAndInterest":"中国社会、平和、人権","isFollowed":false,"introduction":"北京を拠点に中国社会の様々なニュースを追いかけています。2012年に入社し、新潟、島根、東京、上海で勤務してきました。25年9月から中国の軍事・外交を担当。平和や人権分野にも関心があります。","iconImageUrl":"https://profile-image.kraken.asahi.com/376d8fe3b04371efebc1bdceb2c31077edc2433d4b88f372c2a70ffa7101e647","canSendFanLetter":true}],"isWriterFollowAvailableMember":false},"isFreeArea":true}'><div id="writerProfile" class="yT62y"><p class="FPrYd">この記事を書いた人</p><div class="jdPPS"><div class="zRkIz"><a href="/reporter-bio/376d8fe3b04371efebc1bdceb2c31077edc2433d4b88f372c2a70ffa7101e647?iref=article_reporter_profile" class="CES5K"></a><div class="iKuvI"><figure class="BKNFc"><img src="https://profile-image.kraken.asahi.com/376d8fe3b04371efebc1bdceb2c31077edc2433d4b88f372c2a70ffa7101e647" alt></figure><dl class="WptL0"><dt>小早川遥平</dt><dd>中国総局</dd></dl></div><dl class="PXedm"><dt>専門・関心分野</dt><dd>中国社会、平和、人権</dd></dl></div></div></div></div><p x-component-name="ArticleCommentList" x-component-data='{"commentCount":0,"commentList":[],"shareUrlBase":"https://www.asahi.com/articles/AST9Z40W1T9ZUHBI02HM.html","articleId":"AST9Z40W1T9ZUHBI02HM","commentIdParam":"","equalCommentIdIndex":-1,"isAuthorized":true,"isFreePlan":false,"isPaidMember":false,"isPresent":false,"isHazard":false,"freeUrlBase":"//www.asahi.com","digitalUrlBase":"//digital.asahi.com"}'></p></main></div>
+
+[出典はこちら](https://www.asahi.com/articles/AST9Z40W1T9ZUHBI02HM.html)

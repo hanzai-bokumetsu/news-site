@@ -1,0 +1,16 @@
+---
+title: "書き込み依頼「国政選挙でもやっていたのでは」 野党が調査要求"
+date: 2025-09-30 20:22:56 +0900
+categories: ["ニュース"]
+image: /assets/img/38ac11396c505490.jpg
+source_url: "https://www.asahi.com/articles/AST9Z35SGT9ZUTFK00FM.html"
+canonical_url: "https://www.asahi.com/articles/AST9Z35SGT9ZUTFK00FM.html"
+content_sha: "e346f6faab5543e3c2a57391c6842036bfb1e3919ff980bf67133a0dd0558be8"
+---
+
+![記事イメージ]({{ site.baseurl }}/assets/img/38ac11396c505490.jpg)
+
+## 記事本文（自動抽出）
+<div><main role="main" id="main"><p></p><div class="y_Qv3"><h1>書き込み依頼「国政選挙でもやっていたのでは」　野党が調査要求</h1></div><p id="gsm_above_SnsUtilityArea"></p><p x-component-name="CommentHeadline" x-component-data='{"commentCount":0,"commentators":[],"mode":"pc"}'></p><div class="nfyQp"><p>　<a href="https://www.asahi.com/senkyo/jiminto-sosaisen/" title="自民党総裁選 のトピックスを開く" class="eWgMZ">自民党総裁選</a>（10月4日投開票）に立候補している<a href="//www.asahi.com/topics/word/%E5%B0%8F%E6%B3%89%E9%80%B2%E6%AC%A1%E9%83%8E.html" title="小泉進次郎 のトピックスを開く" class="eWgMZ">小泉進次郎</a>農林水産相（44）の陣営による動画への書き込み依頼問題をめぐり、野党は「総裁選の正当性が揺らぐ」などとして自民に実態調査を求めている。</p><p>　<a href="https://www.asahi.com/politics/seito/kokumin-minshu/" title="国民民主党 のトピックスを開く" class="eWgMZ">国民民主党</a>の<a href="//www.asahi.com/topics/word/%E7%8E%89%E6%9C%A8%E9%9B%84%E4%B8%80%E9%83%8E.html" title="玉木雄一郎 のトピックスを開く" class="eWgMZ">玉木雄一郎</a>代表は30日の記者会見で、「重大な問題だ。多くの<a href="//www.asahi.com/topics/word/%E8%87%AA%E6%B0%91%E5%85%9A.html" title="自民党 のトピックスを開く" class="eWgMZ">自民党</a>議員が重大だと認識していないことがもっと重大だ」と指摘。小泉氏陣営の総務・広報班長だった<a href="//www.asahi.com/topics/word/%E7%89%A7%E5%B3%B6%E3%81%8B%E3%82%8C%E3%82%93.html" title="牧島かれん のトピックスを開く" class="eWgMZ">牧島かれん</a>元デジタル相が党ネットメディア局長であることに触れ、「<a href="//www.asahi.com/topics/word/%E5%9B%BD%E6%94%BF%E9%81%B8%E6%8C%99.html" title="国政選挙 のトピックスを開く" class="eWgMZ">国政選挙</a>でも同じことをやっていたのではないかという疑惑・疑念は当然生じる」とし、自民に調査・検証と結果公表を求めた。</p><p class="Lujdo">　<a href="https://www.asahi.com/politics/seito/rikken-minshu/" title="立憲民主党 のトピックスを開く" class="eWgMZ">立憲民主党</a>の<a href="//www.asahi.com/topics/word/%E9%87%8E%E7%94%B0%E4%BD%B3%E5%BD%A6.html" title="野田佳彦 のトピックスを開く" class="eWgMZ">野田佳彦</a>代表と…</p></div><p></p><div class="NbZMW"><div class="PxAm1"><p>この記事は</p><img src="//www.asahicom.jp/images/icon_key_gold.png" alt><a href="//www.asahi.com/news/gold.html?iref=com_1kiji_g_0">有料記事</a><p>です。</p><span class="Zgt88">残り<b>234</b>文字</span><span class="hideFromApp">有料会員になると続きをお読みいただけます。</span></div><p class="eQShK">※無料期間中に解約した場合、料金はかかりません</p></div><p x-component-name="WriterProfile" x-component-data='{"writerProfile":{"writerProfileList":[],"isWriterFollowAvailableMember":false},"isFreeArea":true}'></p><p x-component-name="ArticleCommentList" x-component-data='{"commentCount":0,"commentList":[],"shareUrlBase":"https://www.asahi.com/articles/AST9Z35SGT9ZUTFK00FM.html","articleId":"AST9Z35SGT9ZUTFK00FM","commentIdParam":"","equalCommentIdIndex":-1,"isAuthorized":false,"isFreePlan":false,"isPaidMember":false,"isPresent":false,"isHazard":false,"freeUrlBase":"//www.asahi.com","digitalUrlBase":"//digital.asahi.com"}'></p><div class="GA13d"><div class="eGTLS"><p>新しい自民党総裁を選出する選挙が9月22日、告示されました。10月4日に投開票されます。関連ニュースをまとめてお送りします。[<a href="https://www.asahi.com/topics/AP-13d67568-078f-4e51-b002-9af6fb73bd36/?iref=kijishita_link">もっと見る</a>]</p></div></div></main></div>
+
+[出典はこちら](https://www.asahi.com/articles/AST9Z35SGT9ZUTFK00FM.html)
