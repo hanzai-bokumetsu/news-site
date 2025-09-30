@@ -2,7 +2,7 @@ name: Fetch & Post News
 
 on:
   schedule:
-    - cron: "0 * * * 1-5"   # 平日(月=1〜金=5)の毎時00分（UTC）
+    - cron: "3 * * * 1-5"   # 平日(月=1〜金=5)の毎時00分（UTC）
   workflow_dispatch:
 
 permissions:
