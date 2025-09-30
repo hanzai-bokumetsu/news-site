@@ -1,0 +1,16 @@
+---
+title: "警視総監が3度目の謝罪「真摯に反省」 大川原化工機冤罪事件"
+date: 2025-09-30 19:00:00 +0900
+categories: ["ニュース"]
+image: /assets/img/d40c4b87fa75a5f3.jpg
+source_url: "https://www.asahi.com/articles/AST9Z316YT9ZUTIL01CM.html"
+canonical_url: "https://www.asahi.com/articles/AST9Z316YT9ZUTIL01CM.html"
+content_sha: "72792b13c49c782743c8e7a7a85765c8e1a093fb30272463735e5fae442e6414"
+---
+
+![記事イメージ]({{ site.baseurl }}/assets/img/d40c4b87fa75a5f3.jpg)
+
+## 記事本文（自動抽出）
+<div><main role="main" id="main"><p></p><div class="y_Qv3"><h1>警視総監が3度目の謝罪「真摯に反省」　大川原化工機冤罪事件</h1><p class="mhPng"><span class="H8KYB">松田果穂</span><span class="UDj4P"><time datetime="2025-09-30T10:00:00.000Z">2025年9月30日 19時00分</time></span></p></div><p id="gsm_above_SnsUtilityArea"></p><p x-component-name="CommentHeadline" x-component-data='{"commentCount":0,"commentators":[],"mode":"pc"}'></p><div class="nfyQp"><p>　機械メーカー「大川原化工機」（<a href="//www.asahi.com/topics/word/%E6%A8%AA%E6%B5%9C%E5%B8%82.html" title="横浜市 のトピックスを開く" class="eWgMZ">横浜市</a>）をめぐる冤罪（えんざい）事件について、警視庁の迫田裕治<a href="//www.asahi.com/topics/word/%E8%AD%A6%E8%A6%96%E7%B7%8F%E7%9B%A3.html" title="警視総監 のトピックスを開く" class="eWgMZ">警視総監</a>は9月30日、<a href="//www.asahi.com/topics/word/%E6%9D%B1%E4%BA%AC%E9%83%BD%E8%AD%B0%E4%BC%9A.html" title="東京都議会 のトピックスを開く" class="eWgMZ">東京都議会</a>本会議で「この場をお借りして皆様に改めておわびを申し上げる。捜査の基本を欠き、違法な捜査を行ったことを真摯（しんし）に反省している」と陳謝した。警視総監による謝罪は異例だが、この事件では、検証報告書をまとめた8月7日の記者会見と、今月19日の都議会常任委員会でも陳謝しており、今回で3度目。</p><p>　この日は<a href="//www.asahi.com/topics/word/%E4%BB%A3%E8%A1%A8%E8%B3%AA%E5%95%8F.html" title="代表質問 のトピックスを開く" class="eWgMZ">代表質問</a>で、迫田氏は、<a href="//www.asahi.com/topics/word/%E5%9C%B0%E5%9F%9F%E6%94%BF%E5%85%9A.html" title="地域政党 のトピックスを開く" class="eWgMZ">地域政党</a>「都民ファーストの会」の森村隆行代表の質問に答える形で陳謝した。</p><p>　事件をめぐっては、<a href="//www.asahi.com/topics/word/%E6%9D%B1%E4%BA%AC%E9%AB%98%E8%A3%81.html" title="東京高裁 のトピックスを開く" class="eWgMZ">東京高裁</a>が5月、捜査を尽くさず逮捕・起訴したのは違法などと認定し、国と都に計約1億6600万円の支払いを命じた。判決は6月に確定した。</p><p>　迫田氏は、森村氏から再発防止策について問われ、捜査内容について幹部が確実にチェック機能を果たしたり、現場の捜査員の相談・意見を受け付けたりする体制整備などについて説明した。</p><p>　迫田氏はこのほか、<a href="https://www.asahi.com/politics/seito/rikken-minshu/" title="立憲民主党 のトピックスを開く" class="eWgMZ">立憲民主党</a>の竹井庸子幹事長らの質問にも答え、「逮捕権など国民から付託された強い権限の重みを十分に自覚し、たゆみない努力を積み重ねて参る」などと述べた。</p><p id="_gtm_LastLine"></p></div><p></p><div class="NbZMW"><div class="PxAm1"><p>有料会員になると会員限定の<span>有料記事もお読みいただけます。</span></p></div><p class="eQShK">※無料期間中に解約した場合、料金はかかりません</p></div><p x-component-name="WriterProfile" x-component-data='{"writerProfile":{"writerProfileList":[],"isWriterFollowAvailableMember":false},"isFreeArea":true}'></p><p x-component-name="ArticleCommentList" x-component-data='{"commentCount":0,"commentList":[],"shareUrlBase":"https://www.asahi.com/articles/AST9Z316YT9ZUTIL01CM.html","articleId":"AST9Z316YT9ZUTIL01CM","commentIdParam":"","equalCommentIdIndex":-1,"isAuthorized":true,"isFreePlan":false,"isPaidMember":false,"isPresent":false,"isHazard":false,"freeUrlBase":"//www.asahi.com","digitalUrlBase":"//digital.asahi.com"}'></p><div class="GA13d"><div class="eGTLS"><p>化学機器メーカー　「大川原化工機」をめぐる冤罪事件で、違法捜査と認定された東京高裁判決について、警視庁と東京地検は上告を断念しました。関連ニュースをまとめています。[<a href="https://www.asahi.com/topics/AP-aecd8478-1ca2-49b9-bff0-d8e37f2b295b/?iref=kijishita_link">もっと見る</a>]</p></div></div></main></div>
+
+[出典はこちら](https://www.asahi.com/articles/AST9Z316YT9ZUTIL01CM.html)
