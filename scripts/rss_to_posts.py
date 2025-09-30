@@ -211,21 +211,19 @@ def extract_main_image(entry):
 
 def fetch_fulltext(url):
     try:
-        # Google Newsの中間URLなら実記事URLへ
-        final_url = resolve_google_news_url(url) if "news.google.com" in url else url
+        # まずはリダイレクトを正しく辿って最終URLを得る
+        r0 = requests.get(url, timeout=10, headers=UA, allow_redirects=True)
+        r0.raise_for_status()
+        final_url = r0.url
 
-        r = requests.get(final_url, timeout=10, headers=UA)
-        r.raise_for_status()
+        # 画像など text/html 以外に飛んだ場合は本文抽出を諦める
+        ctype0 = r0.headers.get("Content-Type", "").lower()
+        if "text/html" not in ctype0:
+            return None, None, final_url
 
+        # 本文取得（最終URLに対して再取得でもOKだが、r0をそのまま使って良い）
+        r = r0
         html_text = _decode_html(r)
-
-        # ありがちな「UTF-8をLatin-1で読んだ」系のモジバケを簡易修正
-        # （「ã」「å」等が大量に出る場合はUTF-8で読み直す）
-        if html_text.count("ã") + html_text.count("å") > 20:
-            try:
-                html_text = r.content.decode("utf-8", errors="replace")
-            except Exception:
-                pass
 
         doc = Document(html_text)
         title = doc.short_title()
@@ -233,6 +231,7 @@ def fetch_fulltext(url):
         return title, content_html, final_url
     except Exception:
         return None, None, url
+
 
 
 
