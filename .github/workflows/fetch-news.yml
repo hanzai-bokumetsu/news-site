@@ -2,7 +2,7 @@ name: Fetch & Post News
 
 on:
   schedule:
-    - cron: "3 * * * *"   # 毎時00分（UTC）。JSTでも毎時ちょうどに実行される
+    - cron: "3,33 * * * *"   # 毎時00分と30分（UTC）。JSTでも毎時00分と30分
   workflow_dispatch:
 
 permissions:
@@ -48,7 +48,6 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-          # なるべく安全に最新取り込み→push
           git pull --rebase origin "${GITHUB_REF_NAME:-main}" || true
           git commit -m "chore: auto-post from RSS [skip ci]"
           git push origin HEAD:"${GITHUB_REF_NAME:-main}" || \
