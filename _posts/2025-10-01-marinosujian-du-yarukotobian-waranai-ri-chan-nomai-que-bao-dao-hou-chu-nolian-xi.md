@@ -1,0 +1,16 @@
+---
+title: "マリノス監督「やること変わらない」 日産の売却報道後初の練習公開"
+date: 2025-10-01 15:21:42 +0900
+categories: ["スポーツ"]
+image: /assets/img/b4d5b98bff53341d.jpg
+source_url: "https://www.asahi.com/articles/ASTB120NMTB1UTQP00VM.html"
+canonical_url: "https://www.asahi.com/articles/ASTB120NMTB1UTQP00VM.html"
+content_sha: "19ea7f82d055c98f40894c6596cbb8f499ae047733fc40b0591a916576a9bf1e"
+---
+
+![記事イメージ]({{ site.baseurl }}/assets/img/b4d5b98bff53341d.jpg)
+
+## 記事本文（自動抽出）
+<div><main role="main" id="main"><p></p><div class="y_Qv3"><h1>マリノス監督「やること変わらない」　日産の売却報道後初の練習公開</h1><p class="mhPng"><span class="H8KYB"></span><span class="UDj4P"><time datetime="2025-10-01T06:21:42.000Z">2025年10月1日 15時21分</time></span></p></div><p id="gsm_above_SnsUtilityArea"></p><p x-component-name="CommentHeadline" x-component-data='{"commentCount":0,"commentators":[],"mode":"pc"}'></p><div class="nfyQp"><p>　サッカーのJ1横浜F・マリノスは1日、経営再建中の<a href="//www.asahi.com/topics/word/%E6%97%A5%E7%94%A3%E8%87%AA%E5%8B%95%E8%BB%8A.html" title="日産自動車 のトピックスを開く" class="eWgMZ">日産自動車</a>がクラブ運営会社の株売却を検討しているとの報道があってから初めて、<a href="http://www.asahi.com/area/kanagawa/" title="神奈川県 のトピックスを開く" class="eWgMZ">神奈川県</a><a href="//www.asahi.com/topics/word/%E6%A8%AA%E9%A0%88%E8%B3%80%E5%B8%82.html" title="横須賀市 のトピックスを開く" class="eWgMZ">横須賀市</a>内で報道陣に練習の一部を公開した。</p><p>　<a href="//www.asahi.com/topics/word/%E5%A4%A7%E5%B3%B6%E7%A7%80%E5%A4%AB.html" title="大島秀夫 のトピックスを開く" class="eWgMZ">大島秀夫</a>監督は選手の様子について「変わっていない。気になることはない」と説明。「やることは変わらない。ピッチ内の自分たちが一戦一戦、勝ち点を重ねていくことに<a href="//www.asahi.com/topics/word/%E3%83%95%E3%82%A9%E3%83%BC%E3%82%AB%E3%82%B9.html" title="フォーカス のトピックスを開く" class="eWgMZ">フォーカス</a>しようという話はした」と語った。</p><p>　チームは現在17位で、残留争いのまっただ中。リーグ戦は残り6試合で、4日には<a href="http://www.asahi.com/sports/soccer/list/reysol.html" title="柏レイソル のトピックスを開く" class="eWgMZ">柏レイソル</a>戦を控える。</p><p>　主将の喜田拓也は「動揺はない。柏戦に絶対に勝つ。クラブに誇りを持って戦う。それだけです」と平常心を強調した。</p><p>　<a href="//www.asahi.com/topics/word/%E5%AE%AE%E5%B8%82%E4%BA%AE.html" title="宮市亮 のトピックスを開く" class="eWgMZ">宮市亮</a>も「僕らはサッカー選手として、週末にスタジアムに来てくれる人たちに最高のものを提供するだけ。それが僕らの仕事。僕らが集中するのはピッチだけ」と話した。</p><p>　<a href="//www.asahi.com/topics/word/%E3%83%9B%E3%83%B3%E3%83%80%E3%83%BB%E6%97%A5%E7%94%A3%E7%B5%B1%E5%90%88%E5%8D%94%E8%AD%B0.html" title="日産 のトピックスを開く" class="eWgMZ">日産</a>は、マリノスの運営会社「<a href="http://www.asahi.com/sports/soccer/list/fmarinos.html" title="横浜マリノス のトピックスを開く" class="eWgMZ">横浜マリノス</a>」の株式の約75%を保有。家電量販店大手のノジマに株式の売却を打診していることがわかっている。株の売却によってクラブ運営から退くことも視野に入れて検討している模様だ。</p><p id="_gtm_LastLine"></p></div><p></p><div class="NbZMW"><div class="PxAm1"><p>有料会員になると会員限定の<span>有料記事もお読みいただけます。</span></p></div><p class="eQShK">※無料期間中に解約した場合、料金はかかりません</p></div><p x-component-name="WriterProfile" x-component-data='{"writerProfile":{"writerProfileList":[],"isWriterFollowAvailableMember":false},"isFreeArea":true}'></p><p x-component-name="ArticleCommentList" x-component-data='{"commentCount":0,"commentList":[],"shareUrlBase":"https://www.asahi.com/articles/ASTB120NMTB1UTQP00VM.html","articleId":"ASTB120NMTB1UTQP00VM","commentIdParam":"","equalCommentIdIndex":-1,"isAuthorized":true,"isFreePlan":false,"isPaidMember":false,"isPresent":false,"isHazard":false,"freeUrlBase":"//www.asahi.com","digitalUrlBase":"//digital.asahi.com"}'></p></main></div>
+
+[出典はこちら](https://www.asahi.com/articles/ASTB120NMTB1UTQP00VM.html)
