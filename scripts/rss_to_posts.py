@@ -360,18 +360,24 @@ def process_entry(entry_dict, state, pool_non_nhk):
             # フォールバック
             summary = extract_summary_from_rss(entry)
             body_md = f"## {title}\n\n{summary or ''}\n\n[出典はこちら]({link})".strip()
-
-    # YAMLフロントマター
+    
+        # YAMLフロントマター
     cats = guess_categories(entry, link, is_nhk_article)
+
+    # ★追加：ここで安全なタイトルを作る
+    safe_title = (title or "").replace('"', '”')
+
     fm_lines = [
         "---",
-        f'title: "{title.replace(\'"\', "”")}"',
+        f'title: "{safe_title}"',   # ← ここはもうエラーにならない
         f"date: {dt.strftime('%Y-%m-%d %H:%M:%S +0900')}",
         f"categories: [{', '.join(cats)}]",
         f"image: {image_path}",
         "---",
         "",
     ]
+    
+    
     content = "\n".join(fm_lines) + body_md.rstrip() + "\n"
 
     final_path = path
