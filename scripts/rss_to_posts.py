@@ -1,9 +1,38 @@
-import os, re, json, hashlib, datetime, pathlib, unicodedata, urllib.parse, time
-import feedparser, requests
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+rss_to_posts.py — NHKがログイン必須でも“他社へ自動振替”して全文取得する版
+- NHK記事は原則 Web へ取りに行かない
+- タイトル類似度で同一ニュースを他社フィードから自動検索し、見つかればそのURLから本文抽出
+- 見つからない場合のみ、NHKはRSSサマリー＋出典リンクのみ
+- 画像は本文ソース（=他社）から取得。サマリー落ち時はRSSの media:* を利用
+- 有料/転載不可ワードはスキップ
+- 重複防止（URLハッシュ）
+- カテゴリ推定（簡易）
+- PRIVATE_MODE=1 の時だけ NHK も直接本文取得したい人向けのフックあり（公開は非推奨）
+
+依存:
+  pip install feedparser readability-lxml lxml python-slugify requests
+
+使い方:
+  python scripts/rss_to_posts.py
+"""
+
+import os
+import re
+import json
+import time
+import hashlib
+import datetime
+import pathlib
 from urllib.parse import urlparse
+import requests
+import feedparser
 from slugify import slugify
-from lxml import html as lxml_html
 from readability import Document
+from lxml import html as lxml_html
+from difflib import SequenceMatcher
 
 # ==============================
 # 基本設定
@@ -12,555 +41,384 @@ BASE   = pathlib.Path(__file__).resolve().parents[1]
 POSTS  = BASE / "_posts"
 IMGDIR = BASE / "assets" / "img"
 DB     = BASE / ".data"
+STATE  = DB / "rss_state.json"
+
 for p in (DB, POSTS, IMGDIR):
     p.mkdir(parents=True, exist_ok=True)
 
-UA = {"User-Agent": "Mozilla/5.0"}
-IMG_TIMEOUT = 10
+UA = {"User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"}
 
-FEEDS = [
-    # 大手ポータル
-    "https://www3.nhk.or.jp/rss/news/cat0.xml",  # 総合
-    "https://www3.nhk.or.jp/rss/news/cat1.xml",  # 社会
-    "https://www3.nhk.or.jp/rss/news/cat5.xml",  # 科学・文化
-    "https://news.yahoo.co.jp/rss/topics/domestic.xml",
-    "https://news.yahoo.co.jp/rss/topics/world.xml",
-    "https://news.yahoo.co.jp/rss/topics/local.xml",
-    "https://news.yahoo.co.jp/rss/topics/sports.xml",
+# フィードリスト: scripts/feeds.txt があればそれを優先
+FEEDS_TXT = BASE / "scripts" / "feeds.txt"
+if FEEDS_TXT.exists():
+    FEEDS = [line.strip() for line in FEEDS_TXT.read_text(encoding="utf-8").splitlines()
+             if line.strip() and not line.strip().startswith("#")]
+else:
+    # 最低限の例。実際は feeds.txt に各社RSSを列挙して運用してね
+    FEEDS = [
+        "https://www3.nhk.or.jp/rss/news/cat0.xml",  # NHK 総合
+        # 例: 共同通信/時事/毎日/読売/朝日/地方紙などを追加しておくと振替成功率が上がる
+    ]
 
-    # 大手新聞社など
-    "https://www.asahi.com/rss/asahi/newsheadlines.rdf",
-    "https://mainichi.jp/rss/etc/mainichi-flash.rss",
-    "https://www.yomiuri.co.jp/rss/edition/national/",
-    "https://www.jiji.com/rss/rss.php?g=soc",
+# NHK判定
+NHK_HOSTS = ("nhk.or.jp", "www3.nhk.or.jp")
 
-    # Google News（媒体横断）
-    "https://news.google.com/rss?hl=ja&gl=JP&ceid=JP:ja",
-    "https://news.google.com/rss/search?q=逮捕+OR+容疑+OR+事件&hl=ja&gl=JP&ceid=JP:ja",
-    "https://news.google.com/rss/search?q=スポーツ&hl=ja&gl=JP&ceid=JP:ja",
+def is_nhk(url: str) -> bool:
+    try:
+        h = urlparse(url).hostname or ""
+        return any(h == d or h.endswith("." + d) for d in NHK_HOSTS)
+    except Exception:
+        return False
+
+# 公開に向かないキーワード: 有料/会員限定/転載不可等
+BLOCK_WORDS = [
+    "有料記事", "会員限定", "会員のみ", "電子版限定",
+    "転載を禁じます", "無断転載を禁じます", "著作権", "Copyright",
 ]
 
-CATEGORY_MAPPING = {
-    "教員": ["性犯罪", "教員"],
-    "教師": ["性犯罪", "教員"],
-    "女子生徒": ["児童"],
-    "京都": ["京都府"],
-    "大阪": ["大阪府"],
-}
+def should_skip(entry) -> bool:
+    t = " ".join([
+        (entry.get("title") or ""),
+        (entry.get("summary") or ""),
+        (entry.get("description") or ""),
+    ])
+    return any(w in t for w in BLOCK_WORDS)
 
-CRIME_KEYWORDS = [
-    "逮捕","容疑","容疑者","送検","起訴","不起訴","被告","強盗","窃盗","詐欺",
-    "わいせつ","盗撮","強制","傷害","暴行","殺人","覚醒剤","麻薬","拳銃","横領",
-    "児童買春","淫行","誘拐","性犯罪","猥褻","強制性交","迷惑防止条例"
-]
-SPORTS_KEYWORDS = [
-    "ホームラン","打点","先発","登板","投手","打者","カープ","阪神","巨人","DeNA",
-    "ベイスターズ","ヤクルト","中日","日本ハム","日ハム","オリックス","ソフトバンク",
-    "ロッテ","楽天","NPB","Jリーグ","Ｊ１","ゴール","アシスト","ワールドカップ","W杯",
-    "オリンピック","相撲","ボクシング","ラグビー","F1","グランプリ","試合","優勝","順位",
-    "打率","防御率","本塁打"
-]
-PREFS = [
-    "北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県",
-    "茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県",
-    "新潟県","富山県","石川県","福井県","山梨県","長野県",
-    "岐阜県","静岡県","愛知県","三重県",
-    "滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県",
-    "鳥取県","島根県","岡山県","広島県","山口県",
-    "徳島県","香川県","愛媛県","高知県",
-    "福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"
-]
-
-FEED_DEFAULTS = {
-    "https://news.yahoo.co.jp/rss/topics/sports.xml": ["スポーツ"],
-    "https://news.google.com/rss/search?q=スポーツ&hl=ja&gl=JP&ceid=JP:ja": ["スポーツ"],
-}
-
-# ==============================
-# 既存ポストのインデックス化（起動時1回）
-# ==============================
-def build_posts_index():
-    idx = {"by_url": {}, "by_sha": {}}
-    for p in POSTS.glob("*.md"):
-        try:
-            txt = p.read_text(encoding="utf-8")
-        except Exception:
-            continue
-        m = re.match(r"^---\n(.*?)\n---", txt, flags=re.S)
-        if not m:
-            continue
-        fm = m.group(1)
-        def _get(key):
-            r = re.search(rf"^{key}:\s*\"?([^\n\"]+)\"?", fm, flags=re.M)
-            return r.group(1).strip() if r else ""
-        cu = normalize_url(_get("canonical_url") or _get("source_url"))
-        sh = (_get("content_sha") or "").strip()
-        meta = {"path": str(p)}
-        if cu: idx["by_url"][cu] = meta
-        if sh: idx["by_sha"][sh] = meta
-    return idx
-
-# ==============================
-# 永続データ（既読管理）
-# ==============================
-def load_seen():
-    f = DB / "seen.json"
-    base = {"by_url": {}, "by_sha": {}}
-    if f.exists():
-        try:
-            d = json.loads(f.read_text(encoding="utf-8"))
-            if isinstance(d, dict):
-                base["by_url"].update(d.get("by_url", {}))
-                base["by_sha"].update(d.get("by_sha", {}))
-        except Exception:
-            pass
-    # 既存_posts も学習
-    base_from_posts = build_posts_index()
-    base["by_url"].update(base_from_posts["by_url"])
-    base["by_sha"].update(base_from_posts["by_sha"])
-    return base
-
-def save_seen(d):
-    (DB / "seen.json").write_text(json.dumps(d, ensure_ascii=False, indent=2), encoding="utf-8")
-
-def already_seen(seen, canon_url: str, sha: str) -> bool:
-    if canon_url and canon_url in seen["by_url"]:
-        return True
-    if sha and sha in seen["by_sha"]:
-        return True
-    return False
-
-def mark_seen(seen, canon_url: str, sha: str, meta: dict):
-    ts = int(time.time())
-    if canon_url:
-        seen["by_url"][canon_url] = {"ts": ts, **meta}
-    if sha:
-        seen["by_sha"][sha] = {"ts": ts, **meta}
+# PRIVATE_MODE=1 の時だけ NHK も直取りしたい場合のフラグ（※公開は非推奨）
+PRIVATE_MODE = os.getenv("PRIVATE_MODE") == "1"
 
 # ==============================
 # ユーティリティ
 # ==============================
-def normalize_text(s: str) -> str:
-    return unicodedata.normalize("NFKC", s or "")
+def sha256(s: str) -> str:
+    return hashlib.sha256(s.encode("utf-8", errors="ignore")).hexdigest()
 
-def sanitize_filename(s: str) -> str:
-    return re.sub(r"[^a-z0-9\-]+","-", slugify(s or "")).strip("-")
+def load_state() -> dict:
+    if STATE.exists():
+        try:
+            return json.loads(STATE.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
 
-def normalize_url(u: str) -> str:
-    if not u:
+def save_state(state: dict) -> None:
+    tmp = STATE.with_suffix(".tmp")
+    tmp.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp.replace(STATE)
+
+def safe_filename_from_title(title: str) -> str:
+    slug = slugify(title) or "post"
+    return slug[:80]
+
+def dt_from_entry(entry):
+    tm = entry.get("published_parsed") or entry.get("updated_parsed")
+    if tm:
+        dt = datetime.datetime(*tm[:6])
+    else:
+        dt = datetime.datetime.now()
+    return dt  # JST表示はフロントマターで +0900 を付ける
+
+def clean_html_to_text(s: str) -> str:
+    if not s:
         return ""
-    p = urllib.parse.urlsplit(u)
-    # クエリは全部捨てる（媒体ごとの差分ノイズを排除）
-    new = p._replace(query="", fragment="")
-    url = urllib.parse.urlunsplit(new)
-    # AMP → www
-    url = re.sub(r"//amp\.", "//www.", url)
-    # 拡張子無しなら末尾スラッシュ
-    if not re.search(r"\.(html?|xml|jpg|jpeg|png|gif|webp|pdf)(\?|$)", url, re.I) and not url.endswith("/"):
-        url += "/"
-    return url
+    s = re.sub(r"<br\s*/?>", "\n", s, flags=re.I)
+    s = re.sub(r"<[^>]+>", "", s)
+    s = re.sub(r"\r", "", s)
+    s = re.sub(r"\n{3,}", "\n\n", s)
+    return s.strip()
 
-# 本文ノイズ（更新◯分前・関連記事等）を除去して安定化
-_NOISE_PAT = re.compile(
-    r"""(?ix)
-        (?:
-            \d{1,2}:\d{2}                    # 時刻
-          | \d{4}[./-]\d{1,2}[./-]\d{1,2}    # 日付
-          | 更新 \d+ (?:分|時間) 前?
-          | 関連記事|おすすめ|こちらも?おすすめ|広告|PR
-        )
-    """
-)
-def _denoise_text(txt: str) -> str:
-    t = re.sub(r"<[^>]+>", "", txt or "")
-    t = normalize_text(t)
-    t = _NOISE_PAT.sub("", t)
-    t = re.sub(r"\s+", " ", t).strip()
-    return t
+def readability_to_markdown(html_text: str) -> str:
+    doc = Document(html_text)
+    content_html = doc.summary()
+    text = clean_html_to_text(content_html)
+    text = re.sub(r"\n{2,}", "\n\n", text).strip()
+    return text
 
-def fingerprint(title: str, html_body: str) -> str:
-    t = normalize_text((title or "")).strip()
-    plain = _denoise_text(html_body)[:1500]
-    return hashlib.sha256((t + "\n" + plain).encode("utf-8", "ignore")).hexdigest()
-
-def guess_categories(title, summary, entry=None, feed_url=None):
-    cats = set()
-    text = normalize_text(f"{title} {summary}")
-
-    for k, vals in CATEGORY_MAPPING.items():
-        if k in text:
-            cats.update(vals)
-
-    if any(k in text for k in CRIME_KEYWORDS):
-        cats.add("犯罪")
-    if any(k in text for k in SPORTS_KEYWORDS):
-        cats.add("スポーツ")
-
+def extract_first_image_url(doc_html: str, base_url: str) -> str | None:
     try:
-        for t in (entry.get("tags") or []):
-            term = normalize_text((t.get("term") or ""))
-            if any(x in term for x in ["スポーツ","野球","サッカー","相撲","テニス","ゴルフ","ラグビー","F1"]):
-                cats.add("スポーツ")
-            if any(x in term for x in ["事件","事故","裁判","犯罪","わいせつ"]):
-                cats.add("犯罪")
+        tree = lxml_html.fromstring(doc_html)
+        # 画像タグ
+        for img in tree.xpath("//img[@src]"):
+            src = img.get("src")
+            if src and not src.lower().startswith("data:"):
+                return lxml_html.make_links_absolute(src, base_url)
+        # og:image
+        meta = tree.xpath("//meta[translate(@property,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='og:image' or translate(@name,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='og:image']/@content")
+        if meta:
+            return lxml_html.make_links_absolute(meta[0], base_url)
     except Exception:
-        pass
+        return None
+    return None
 
-    for p in PREFS:
-        if p in text:
-            cats.add(p)
-
-    if feed_url in FEED_DEFAULTS:
-        cats.update(FEED_DEFAULTS[feed_url])
-
-    if not cats:
-        cats.add("ニュース")
-
-    return sorted(list(cats))
-
-# ==============================
-# HTML処理
-# ==============================
-def _decode_html(response: requests.Response) -> str:
-    raw = response.content
-    m = re.search(br'<meta[^>]+charset=["\']?([a-zA-Z0-9_\-]+)', raw, re.I) or \
-        re.search(br'charset=([a-zA-Z0-9_\-]+)', raw, re.I)
-    if m:
-        enc = m.group(1).decode(errors="ignore").lower()
-        try:
-            return raw.decode(enc, errors="replace")
-        except Exception:
-            pass
-    enc = (getattr(response, "apparent_encoding", None) or response.encoding or "").lower()
-    if enc:
-        try:
-            return raw.decode(enc, errors="replace")
-        except Exception:
-            pass
-    return raw.decode("utf-8", errors="replace")
-
-def _fallback_extract_title_content(html_text: str):
+def download_image(url: str, prefix_dt: datetime.datetime) -> str | None:
     try:
-        t = lxml_html.fromstring(html_text)
+        r = requests.get(url, headers=UA, timeout=10)
+        if r.status_code != 200 or not r.content:
+            return None
+        ext = ".jpg"
+        path = IMGDIR / f"{prefix_dt.strftime('%Y%m%d')}-{sha256(url)[:10]}{ext}"
+        path.write_bytes(r.content)
+        return f"/assets/img/{path.name}"
     except Exception:
-        return None, None
+        return None
 
-    ogt = t.xpath('//meta[@property="og:title"]/@content')
-    twt = t.xpath('//meta[@name="twitter:title"]/@content')
-    h1  = t.xpath('//h1//text()')
-    title = (ogt[0] if ogt else (twt[0] if twt else ("".join(h1).strip() if h1 else None)))
-
-    arts = t.xpath('//article')
-    body = None
-    if arts:
-        body = "\n".join(a.text_content().strip() for a in arts if a.text_content()).strip()
-    if not body:
-        ogd = t.xpath('//meta[@property="og:description"]/@content')
-        if ogd:
-            body = ogd[0].strip()
-    if body:
-        body = re.sub(r'\n{3,}', '\n\n', body)
-
-    return title, body
-
-def _extract_canonical_from_html(html_text: str, base_url: str) -> str:
-    try:
-        t = lxml_html.fromstring(html_text)
-        link = t.xpath('//link[@rel="canonical"]/@href')
-        if link:
-            can = urllib.parse.urljoin(base_url, link[0])
-            return normalize_url(can)
-    except Exception:
-        pass
+def extract_summary_from_rss(entry: dict) -> str:
+    # 優先度: content:encoded > summary_detail > description > summary
+    for key in ("content", "summary_detail", "description", "summary"):
+        v = entry.get(key)
+        if not v:
+            continue
+        if key == "content":
+            try:
+                html_val = (v[0].get("value") or "").strip()
+            except Exception:
+                html_val = ""
+            if html_val:
+                return clean_html_to_text(html_val)
+        elif key == "summary_detail":
+            html_val = (v.get("value") or "").strip()
+            if html_val:
+                return clean_html_to_text(html_val)
+        else:
+            html_val = (v or "").strip()
+            if html_val:
+                return clean_html_to_text(html_val)
     return ""
 
-def _pick_publisher_url_from_gnews_html(html_text: str) -> str | None:
-    hrefs = re.findall(r'href="(https?://[^"]+)"', html_text, flags=re.I)
-    if not hrefs:
-        return None
-    bad_domains = ("google.com", "news.google.com", "gstatic.com", "googleusercontent.com")
-    bad_exts = (".jpg",".jpeg",".png",".gif",".webp",".svg",".avif")
-    candidates = []
-    for u in hrefs:
-        lu = u.lower()
-        if any(b in lu for b in bad_domains):
-            continue
-        if any(lu.split("?")[0].endswith(ext) for ext in bad_exts):
-            continue
-        candidates.append(u)
-    if not candidates:
-        return None
-    def _clean(u: str) -> str:
-        u2 = re.sub(r"//amp\.", "//www.", u)
-        u2 = re.sub(r"[?&](utm_[^=&]+|gclid|fbclid|yclid|ocid)=[^&]+", "", u2)
-        return u2
-    return _clean(candidates[0])
-
-def _pick_external_from_yahoo_pickup(html_text: str) -> str | None:
+def extract_image_from_rss(entry: dict) -> str | None:
+    thumbs = entry.get("media_thumbnail") or entry.get("media_content") or []
     try:
-        t = lxml_html.fromstring(html_text)
+        if isinstance(thumbs, list) and thumbs:
+            url = thumbs[0].get("url")
+            return url if url else None
     except Exception:
-        return None
-
-    areas = t.xpath('//*[@role="main"]') or [t]
-    bad_hosts = ("yahoo.co.jp", "yimg.jp", "yahooapis.jp")
-
-    for area in areas:
-        for href in area.xpath('.//a[@href]/@href'):
-            if not href.startswith("http"):
-                continue
-            host = urlparse(href).netloc.lower()
-            if any(b in host for b in bad_hosts):
-                continue
-            return href
-    for href in t.xpath('//a[@href]/@href'):
-        if not href.startswith("http"):
-            continue
-        host = urlparse(href).netloc.lower()
-        if any(b in host for b in bad_hosts):
-            continue
-        return href
-    return None
-
-# ==============================
-# 画像処理
-# ==============================
-def fetch_image(url):
+        pass
+    enclosures = entry.get("enclosures") or []
     try:
-        r = requests.get(url, timeout=IMG_TIMEOUT, headers=UA)
-        r.raise_for_status()
-        ctype = r.headers.get("Content-Type","").lower()
-        ext = ".jpg"
-        if "png" in ctype: ext = ".png"
-        if "webp" in ctype: ext = ".webp"
-        name = hashlib.sha1(url.encode()).hexdigest()[:16] + ext
-        path = IMGDIR / name
-        path.write_bytes(r.content)
-        return f"/assets/img/{name}"
-    except Exception:
-        return None
-
-def extract_main_image_from_entry(entry):
-    if "media_content" in entry and entry.media_content:
-        murl = entry.media_content[0].get("url")
-        if murl: return murl
-    if "links" in entry:
-        for l in entry.links:
-            if l.get("rel") in ("enclosure", "image"):
-                if l.get("href"): return l["href"]
-    html_snip = entry.get("summary", "") or entry.get("content",[{"value":""}])[0]["value"]
-    try:
-        tree = lxml_html.fromstring(html_snip)
-        imgs = tree.xpath("//img/@src")
-        if imgs: return imgs[0]
+        if isinstance(enclosures, list) and enclosures:
+            url = enclosures[0].get("href")
+            if url and any(url.lower().endswith(ext) for ext in (".jpg",".jpeg",".png",".webp",".gif")):
+                return url
     except Exception:
         pass
     return None
 
-def extract_og_image(html_text: str) -> str | None:
-    try:
-        t = lxml_html.fromstring(html_text)
-        og = t.xpath('//meta[@property="og:image"]/@content')
-        return og[0] if og else None
-    except Exception:
-        return None
+# タイトル正規化と類似度
+def normalize_title(t: str) -> str:
+    t = t or ""
+    t = re.sub(r"【[^】]*】", "", t)  # 先頭の【○○】除去
+    t = re.sub(r"\s+", " ", t)
+    t = re.sub(r"[0-9]{1,2}日|[0-9]{1,2}時|[0-9]{1,2}分", "", t)  # 日時の揺れ削り
+    t = t.strip()
+    return t
+
+def title_similarity(a: str, b: str) -> float:
+    return SequenceMatcher(None, normalize_title(a), normalize_title(b)).ratio()
+
+def guess_categories(entry, link, is_nhk_article: bool):
+    cats = []
+    if is_nhk_article:
+        cats.append("NHK")
+    title = (entry.get("title") or "")
+    PREFS = ["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県",
+             "埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県",
+             "岐阜県","静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県",
+             "鳥取県","島根県","岡山県","広島県","山口県","徳島県","香川県","愛媛県","高知県","福岡県",
+             "佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"]
+    for p in PREFS:
+        if p in title:
+            cats.append(p)
+            break
+    if not cats:
+        cats.append("ニュース")
+    return cats
 
 # ==============================
-# 本文取得（Google News / Yahoo! pickup 解決込み）
-# 戻り値: (title, content_html, final_url, ogimg, canonical_url)
+# フィードの読み込み（全件プール）
 # ==============================
-def fetch_fulltext(url):
-    try:
-        r0 = requests.get(url, timeout=10, headers=UA, allow_redirects=True)
-        r0.raise_for_status()
-        final_url = r0.url
-        ctype0 = r0.headers.get("Content-Type", "").lower()
+def load_all_entries():
+    all_entries = []
+    for feed_url in FEEDS:
+        try:
+            d = feedparser.parse(feed_url)
+        except Exception:
+            continue
+        for e in d.entries:
+            link  = (e.get("link") or "").strip()
+            title = (e.get("title") or "").strip()
+            if not link or not title:
+                continue
+            all_entries.append({
+                "raw": e,
+                "link": link,
+                "title": title,
+                "is_nhk": is_nhk(link),
+                "dt": dt_from_entry(e),
+                "feed": feed_url,
+                "host": urlparse(link).hostname or "",
+            })
+    # 新しい順に
+    all_entries.sort(key=lambda x: x["dt"], reverse=True)
+    return all_entries
 
-        # ---- Google News: 中継 → 配信社URLへ ----
-        if "news.google.com" in final_url:
-            html0 = _decode_html(r0)
-            ext = _pick_publisher_url_from_gnews_html(html0)
-            if not ext:
-                return None, None, final_url, None, ""
-            r1 = requests.get(ext, timeout=10, headers=UA, allow_redirects=True)
-            r1.raise_for_status()
-            final_url = r1.url
-            if "text/html" not in r1.headers.get("Content-Type","").lower():
-                return None, None, final_url, None, ""
-            html_text = _decode_html(r1)
+# NHK→他社へ自動振替
+def find_alternative_source(nhk_entry_dict, pool, sim_threshold=0.82, time_window_hours=72):
+    nhk_title = nhk_entry_dict["title"]
+    nhk_dt    = nhk_entry_dict["dt"]
+    for cand in pool:
+        if cand["is_nhk"]:
+            continue
+        # 時間窓
+        if abs((nhk_dt - cand["dt"]).total_seconds()) > time_window_hours * 3600:
+            continue
+        # 類似度
+        if title_similarity(nhk_title, cand["title"]) >= sim_threshold:
+            return cand
+    return None
 
-        # ---- Yahoo! /pickup/：外部記事URLに解決 ----
-        elif "news.yahoo.co.jp/pickup/" in final_url:
-            html0 = _decode_html(r0)
-            ext = _pick_external_from_yahoo_pickup(html0)
-            if not ext:
-                return None, None, final_url, None, ""
-            r1 = requests.get(ext, timeout=10, headers=UA, allow_redirects=True)
-            r1.raise_for_status()
-            final_url = r1.url
-            if "text/html" not in r1.headers.get("Content-Type","").lower():
-                return None, None, final_url, None, ""
-            html_text = _decode_html(r1)
+# ==============================
+# 本文保存ロジック
+# ==============================
+def process_entry(entry_dict, state, pool_non_nhk):
+    entry = entry_dict["raw"]
+    link  = entry_dict["link"]
+    title = entry_dict["title"]
+    is_nhk_article = entry_dict["is_nhk"]
+    dt    = entry_dict["dt"]
 
-        # ---- 通常：HTMLページならそのまま抽出 ----
+    # 重複
+    key = sha256(link)
+    if key in state.get("done", {}):
+        return False, "dup"
+
+    # ブロック
+    if should_skip(entry):
+        state.setdefault("skipped", {})[key] = {"link": link, "reason": "blocked_words"}
+        return False, "blocked"
+
+    ymd = dt.strftime("%Y-%m-%d")
+    fn  = f"{ymd}-{safe_filename_from_title(title)}.md"
+    path = POSTS / fn
+
+    image_path = ""
+    body_md = ""
+    used_link = link
+    used_host = entry_dict["host"]
+    used_note = ""
+
+    if is_nhk_article and not PRIVATE_MODE:
+        # まず“他社ソース”を探す
+        alt = find_alternative_source(entry_dict, pool_non_nhk)
+        if alt:
+            # 他社から本文を取得
+            try:
+                r = requests.get(alt["link"], headers=UA, timeout=15)
+                html_text = r.text if r.status_code == 200 else ""
+            except Exception:
+                html_text = ""
+            if html_text:
+                body_md = readability_to_markdown(html_text)
+                img_url = extract_first_image_url(html_text, alt["link"])
+                if img_url:
+                    saved = download_image(img_url, dt)
+                    if saved:
+                        image_path = saved
+            else:
+                # 他社も取れない時はNHKサマリー
+                summary = extract_summary_from_rss(entry)
+                body_md = f"## {title}\n\n{summary or '（※各社ページの取得に失敗しました）'}\n\n[出典（NHK）]({link})"
+            used_link = alt["link"]
+            used_host = alt["host"]
+            used_note = f"> ※ 本文は {used_host} から取得。NHKは出典として併記。"
+            # 末尾に出典を添える
+            body_md += f"\n\n{used_note}\n\n[出典（NHK）]({link})"
         else:
-            if "text/html" not in ctype0:
-                return None, None, final_url, None, ""
-            html_text = _decode_html(r0)
+            # 他社が見つからない → サマリーのみ
+            summary = extract_summary_from_rss(entry)
+            if not summary:
+                summary = "（※NHKの仕様変更により、RSS概要以外を取得できません。詳細は出典でご覧ください。）"
+            body_md = f"## {title}\n\n{summary}\n\n> ※ NHK記事は本文・画像の転載が許可されていないため、概要のみ掲載しています。\n[出典（NHK）]({link})"
+    else:
+        # NHK以外、または PRIVATE_MODE=1（自己用）
+        html_text = ""
+        try:
+            r = requests.get(link, headers=UA, timeout=15)
+            if r.status_code == 200:
+                html_text = r.text
+        except Exception:
+            pass
+        if html_text:
+            body_md = readability_to_markdown(html_text)
+            img_url = extract_first_image_url(html_text, link)
+            if img_url:
+                saved = download_image(img_url, dt)
+                if saved:
+                    image_path = saved
+        else:
+            # フォールバック
+            summary = extract_summary_from_rss(entry)
+            body_md = f"## {title}\n\n{summary or ''}\n\n[出典はこちら]({link})".strip()
 
-        # Readability
-        doc = Document(html_text)
-        title = (doc.short_title() or "").strip()
-        content_html = doc.summary(html_partial=True)
-
-        # 短すぎるときはフォールバック
-        plain = re.sub(r"<[^>]+>", "", content_html or "").strip()
-        if len(plain) < 180:
-            fb_title, fb_body = _fallback_extract_title_content(html_text)
-            if fb_title and (not title or title.lower() == "google news"):
-                title = fb_title
-            if fb_body and not plain:
-                content_html = "<p>" + fb_body.replace("\n", "<br>") + "</p>"
-
-        ogimg = extract_og_image(html_text)
-        canon = _extract_canonical_from_html(html_text, final_url)
-        return (title or None), (content_html or None), final_url, ogimg, canon
-
-    except Exception:
-        return None, None, url, None, ""
-
-# ==============================
-# Front matter
-# ==============================
-def make_front_matter(title, date, categories, image_path, source_url, canonical_url, content_sha):
-    cats_yaml = ", ".join([f'"{c}"' for c in categories])
-    safe_title = (title or "").replace('"', '\\"')
-    lines = [
+    # YAMLフロントマター
+    cats = guess_categories(entry, link, is_nhk_article)
+    fm_lines = [
         "---",
-        f'title: "{safe_title}"',
-        f"date: {date.strftime('%Y-%m-%d %H:%M:%S')} +0900",
-        f"categories: [{cats_yaml}]",
+        f'title: "{title.replace(\'"\', "”")}"',
+        f"date: {dt.strftime('%Y-%m-%d %H:%M:%S +0900')}",
+        f"categories: [{', '.join(cats)}]",
+        f"image: {image_path}",
+        "---",
+        "",
     ]
-    if image_path:
-        lines.append(f"image: {image_path}")
-    if source_url:
-        lines.append(f'source_url: "{source_url}"')
-    if canonical_url:
-        lines.append(f'canonical_url: "{canonical_url}"')
-    if content_sha:
-        lines.append(f'content_sha: "{content_sha}"')
-    lines.append("---")
-    return "\n".join(lines) + "\n"
+    content = "\n".join(fm_lines) + body_md.rstrip() + "\n"
+
+    final_path = path
+    if final_path.exists():
+        i = 2
+        stem = final_path.stem
+        while True:
+            altp = POSTS / f"{stem}-{i}.md"
+            if not altp.exists():
+                final_path = altp
+                break
+            i += 1
+
+    final_path.write_text(content, encoding="utf-8")
+
+    state.setdefault("done", {})[key] = {
+        "link": link,
+        "title": title,
+        "saved": final_path.name,
+        "ts": int(time.time()),
+        "used_source": used_host,
+    }
+    return True, f"saved {final_path.name}"
 
 # ==============================
 # メイン
 # ==============================
 def main():
-    seen = load_seen()
-    now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
-    new_count = 0
+    state = load_state()
+    all_entries = load_all_entries()
+    # NHK以外のプール（振替探索用）
+    pool_non_nhk = [e for e in all_entries if not e["is_nhk"]]
 
-    # 同一ラン内のフィード横断重複を抑止
-    run_guard = set()  # {(host, title_norm)}
+    total_new = 0
+    logs = []
 
-    for feed_url in FEEDS:
-        d = feedparser.parse(feed_url)
-        for e in d.entries:
-            raw_link = (e.get("link") or "").strip()
-            if not raw_link:
-                continue
+    # 新しい順で処理
+    for ed in all_entries:
+        ok, msg = process_entry(ed, state, pool_non_nhk)
+        if ok:
+            total_new += 1
+        logs.append(f"{'OK' if ok else '..'} {msg}")
 
-            full_title, content_html, final_url, ogimg, canon = fetch_fulltext(raw_link)
-
-            # 本文なし or 依然として Google News のまま → スキップ
-            if (not content_html) or ("news.google.com" in (final_url or "").lower()):
-                continue
-
-            # URL正規化 & canonical 優先
-            n_final = normalize_url(final_url)
-            canon_url = normalize_url(canon or n_final)
-
-            # タイトル（本文側がまともなら優先）
-            rss_title = (e.get("title") or "").strip()
-            title = full_title if (full_title and len(full_title) > 8 and full_title.lower() != "google news") else rss_title
-
-            # ラン内ガード（同ホスト×同タイトル）
-            try:
-                host = urllib.parse.urlsplit(canon_url or n_final).netloc
-            except Exception:
-                host = ""
-            key_inrun = (host, normalize_text(title))
-            if key_inrun in run_guard:
-                continue
-            run_guard.add(key_inrun)
-
-            # 指紋（内容ハッシュ・ノイズ除去版）
-            content_sha = fingerprint(title, content_html)
-
-            # 重複チェック（URL or 内容）
-            if already_seen(seen, canon_url, content_sha):
-                continue
-
-            # 公開日時
-            published = e.get("published_parsed") or e.get("updated_parsed")
-            dt = now
-            if published:
-                try:
-                    dt = datetime.datetime(*published[:6], tzinfo=datetime.timezone.utc)\
-                            .astimezone(datetime.timezone(datetime.timedelta(hours=9)))
-                except Exception:
-                    pass
-
-            # カテゴリ推定
-            summary = e.get("summary", "")
-            cats = guess_categories(title, summary, entry=e, feed_url=feed_url)
-
-            # 画像：RSS → og:image
-            img_url = extract_main_image_from_entry(e) or ogimg
-            image_path = fetch_image(img_url) if img_url else None
-
-            # ファイル作成（同日スラッグ衝突回避）
-            slug_base = sanitize_filename(title)[:80] or hashlib.sha1(title.encode()).hexdigest()[:10]
-            slug = slug_base
-            post_path = (POSTS / f"{dt.strftime('%Y-%m-%d')}-{slug}.md")
-            i = 0
-            while post_path.exists():
-                i += 1
-                suffix = hashlib.sha1(f"{slug_base}-{i}".encode()).hexdigest()[:6]
-                slug = f"{slug_base}-{suffix}"
-                post_path = (POSTS / f"{dt.strftime('%Y-%m-%d')}-{slug}.md")
-
-            fm = make_front_matter(
-                title=title,
-                date=dt,
-                categories=cats,
-                image_path=image_path,
-                source_url=n_final,
-                canonical_url=canon_url,
-                content_sha=content_sha
-            )
-
-            body = ""
-            if image_path:
-                body += "![記事イメージ]({{ site.baseurl }}" + image_path + ")\n\n"
-            body += "## 記事本文（自動抽出）\n" + (content_html or "") + "\n\n"
-            body += f"[出典はこちら]({n_final})\n"
-
-            post_path.parent.mkdir(parents=True, exist_ok=True)
-            post_path.write_text(fm + "\n" + body, encoding="utf-8")
-
-            # 既読登録（都度保存して途中停止でも効果が残る）
-            mark_seen(seen, canon_url, content_sha, {
-                "title": title,
-                "path": str(post_path.relative_to(BASE)),
-                "date": dt.isoformat(),
-                "link": n_final
-            })
-            save_seen(seen)
-
-            new_count += 1
-
-    print(f"Created {new_count} posts.")
+    save_state(state)
+    print(f"done. new={total_new}")
+    for line in logs:
+        print(line)
 
 if __name__ == "__main__":
     main()
