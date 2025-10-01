@@ -20,7 +20,9 @@ IMG_TIMEOUT = 10
 
 FEEDS = [
     # 大手ポータル
-    "https://www3.nhk.or.jp/rss/news/cat0.xml",
+    "https://www3.nhk.or.jp/rss/news/cat0.xml",  # 総合
+    "https://www3.nhk.or.jp/rss/news/cat1.xml",  # 社会
+    "https://www3.nhk.or.jp/rss/news/cat5.xml",  # 科学・文化
     "https://news.yahoo.co.jp/rss/topics/domestic.xml",
     "https://news.yahoo.co.jp/rss/topics/world.xml",
     "https://news.yahoo.co.jp/rss/topics/local.xml",
