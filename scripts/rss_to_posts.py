@@ -158,18 +158,19 @@ def extract_image_from_rss(entry) -> str:
     return ""
 
 
-def guess_categories(entry, link, is_nhk_article: bool):
+def guess_categories(entry, link, is_nhk_article: bool, entry_dict_feed: str = ""):
     cats = []
     host = urlparse(link).hostname or ""
 
     # ソース判定
+    feed_url = entry_dict_feed or ""
     if is_nhk_article:
         cats.append("NHK")
     elif "reuters.com" in host:
         cats.append("Reuters")
     elif "bbc.co.uk" in host or "bbc.com" in host:
         cats.append("BBC")
-    elif "cnn.co.jp" in host or "cnn.com" in host:
+    elif "cnn.co.jp" in host or "cnn.com" in host or "cnn.co.jp" in feed_url:
         cats.append("CNN")
 
     title = (entry.get("title") or "")
@@ -245,7 +246,7 @@ def process_entry(entry_dict, state):
     body_md = f"{summary}\n\n[続きを読む →]({link})"
 
     # カテゴリ
-    cats = guess_categories(entry, link, is_nhk_article)
+    cats = guess_categories(entry, link, is_nhk_article, entry_dict.get("feed", ""))
 
     # タイトルのサニタイズ
     safe_title = (title or "").replace('"', '\\"')

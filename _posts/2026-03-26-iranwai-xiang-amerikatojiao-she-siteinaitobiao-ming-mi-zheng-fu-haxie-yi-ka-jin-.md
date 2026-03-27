@@ -1,9 +1,0 @@
----
-title: "イラン外相、アメリカと交渉していないと表明　米政府は協議が「進行中」で「生産的」と"
-date: 2026-03-26 11:16:13 +0900
-categories: [BBC]
-image: "https://ichef.bbci.co.uk/ace/ws/240/cpsprodpb/338b/live/6d193f40-284d-11f1-b297-95b0a0a8331e.jpg"
----
-イランのアラグチ外相は25日、米・イスラエルとの戦争終結に向けてイランはアメリカと交渉していないし、「そのつもりもない」と発言した。この直前には、米ホワイトハウスの報道官が、協議は「進行中」で「生産的」だと述べていた。
-
-[続きを読む →](https://www.bbc.com/japanese/articles/cly0x71nrm7o?at_medium=RSS&at_campaign=rss)
