@@ -1,0 +1,6 @@
+https://www3.nhk.or.jp/rss/news/cat0.xml
+https://news.yahoo.co.jp/rss/topics/top-picks.xml
+https://news.yahoo.co.jp/rss/topics/domestic.xml
+https://news.yahoo.co.jp/rss/topics/world.xml
+https://news.yahoo.co.jp/rss/topics/business.xml
+https://news.yahoo.co.jp/rss/topics/it.xml
