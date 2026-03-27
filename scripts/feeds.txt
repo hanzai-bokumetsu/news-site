@@ -1,6 +1,20 @@
+# NHK
 https://www3.nhk.or.jp/rss/news/cat0.xml
-https://news.yahoo.co.jp/rss/topics/top-picks.xml
-https://news.yahoo.co.jp/rss/topics/domestic.xml
-https://news.yahoo.co.jp/rss/topics/world.xml
-https://news.yahoo.co.jp/rss/topics/business.xml
-https://news.yahoo.co.jp/rss/topics/it.xml
+
+# 共同通信（47NEWS）
+https://www.47news.jp/47topics.rss
+
+# 産経新聞
+https://www.sankei.com/rss/news/flash.xml
+
+# 日テレNEWS
+https://news.ntv.co.jp/index.d.xml
+
+# テレ朝news
+https://news.tv-asahi.co.jp/rss/rss.xml
+
+# FNNプライムオンライン
+https://www.fnn.jp/rss
+
+# 毎日新聞
+https://mainichi.jp/rss/etc/mainichi-flash.rss
