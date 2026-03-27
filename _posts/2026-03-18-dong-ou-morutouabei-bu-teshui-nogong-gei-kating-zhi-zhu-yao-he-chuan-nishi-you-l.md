@@ -1,0 +1,9 @@
+---
+title: "東欧モルドヴァ北部で水の供給が停止、主要河川に石油流出　ロシアのウクライナ攻撃が原因か"
+date: 2026-03-18 18:25:43 +0900
+categories: [BBC]
+image: "https://ichef.bbci.co.uk/ace/ws/240/cpsprodpb/91ac/live/15f950b0-21f9-11f1-9256-9b680459597d.jpg"
+---
+モルドヴァ当局はこのほど、北部の都市バルツィへの水の供給を停止した。ロシアの攻撃を受けたウクライナの水力発電所から石油が漏れ、ウクライナとモルドヴァを流れる川へ流出したとみられる。
+
+[続きを読む →](https://www.bbc.com/japanese/articles/c5y5y7w2rd3o?at_medium=RSS&at_campaign=rss)
