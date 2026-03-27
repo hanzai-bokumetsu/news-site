@@ -1,14 +1,17 @@
-# NHK（画像あり）
+# NHK
 https://www3.nhk.or.jp/rss/news/cat0.xml
 
-# 日テレNEWS（画像あり）
-https://news.ntv.co.jp/index.d.xml
+# Yahoo!ニュース 主要
+https://news.yahoo.co.jp/rss/topics/top-picks.xml
 
-# テレ朝news（画像あり）
-https://news.tv-asahi.co.jp/rss/rss.xml
+# Yahoo!ニュース 国内
+https://news.yahoo.co.jp/rss/topics/domestic.xml
 
-# FNNプライムオンライン（画像あり）
-https://www.fnn.jp/rss
+# Yahoo!ニュース 国際
+https://news.yahoo.co.jp/rss/topics/world.xml
 
-# 産経新聞（画像あり）
-https://www.sankei.com/rss/news/flash.xml
+# Reuters日本語
+https://feeds.reuters.com/reuters/JPTopNews
+
+# BBC日本語
+https://feeds.bbci.co.uk/japanese/rss.xml
