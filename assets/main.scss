@@ -207,3 +207,22 @@ a:hover { opacity: .9; }
 .cat-教員 { background: purple; }
 .cat-京都府 { background: seagreen; }
 .cat-大阪府 { background: teal; }
+
+/* ===== ソース別バッジカラー ===== */
+a.badge[title="カテゴリ: NHK"] {
+  background: #000080;
+  color: #ffffff;
+}
+a.badge[title="カテゴリ: BBC"] {
+  background: #ffffff;
+  color: #bb0000;
+  border: 1px solid #bb0000;
+}
+a.badge[title="カテゴリ: Reuters"] {
+  background: #ff7f00;
+  color: #ffffff;
+}
+a.badge[title="カテゴリ: CNN"] {
+  background: #cc0000;
+  color: #ffffff;
+}
