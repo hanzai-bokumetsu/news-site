@@ -1,17 +1,11 @@
 # NHK
 https://www3.nhk.or.jp/rss/news/cat0.xml
 
-# Yahoo!ニュース 主要
-https://news.yahoo.co.jp/rss/topics/top-picks.xml
-
-# Yahoo!ニュース 国内
-https://news.yahoo.co.jp/rss/topics/domestic.xml
-
-# Yahoo!ニュース 国際
-https://news.yahoo.co.jp/rss/topics/world.xml
-
 # Reuters日本語
 https://feeds.reuters.com/reuters/JPTopNews
 
 # BBC日本語
 https://feeds.bbci.co.uk/japanese/rss.xml
+
+# CNN日本語
+https://www.cnn.co.jp/rss/cnn_topstories.rdf
