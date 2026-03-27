@@ -213,6 +213,36 @@ a:hover { opacity: .85; }
   background: linear-gradient(90deg, #c0392b 33%, #ffffff 33%, #ffffff 66%, #c0392b 66%);
 }
 
+/* CNNロゴ風プレースホルダー */
+.cat-CNN {
+  background: #cc0000;
+  position: relative;
+  overflow: hidden;
+}
+.cat-CNN::before {
+  content: "CNN";
+  font-size: 1.3rem;
+  font-weight: 900;
+  font-family: "Arial Black", sans-serif;
+  color: #ffffff;
+  letter-spacing: .05em;
+}
+
+/* BBCロゴ風プレースホルダー */
+.cat-BBC {
+  background: #000000;
+  position: relative;
+  overflow: hidden;
+}
+.cat-BBC::before {
+  content: "BBC";
+  font-size: 1.3rem;
+  font-weight: 900;
+  font-family: "Arial Black", sans-serif;
+  color: #ffffff;
+  letter-spacing: .05em;
+}
+
 .cat-犯罪 { background: #8b0000; }
 .cat-スポーツ { background: #1a5276; }
 .cat-ニュース { background: #7f8c8d; }
