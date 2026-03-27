@@ -24,8 +24,13 @@ import hashlib
 import datetime
 import pathlib
 from urllib.parse import urlparse
+import requests
 import feedparser
 from slugify import slugify
+
+UA = {"User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"}
 
 # ==============================
 # 基本設定
@@ -120,7 +125,32 @@ def extract_summary_from_rss(entry: dict) -> str:
                 return clean_html_to_text(html_val)
     return ""
 
-def guess_categories(entry, link, is_nhk_article: bool):
+def extract_image_from_rss(entry) -> str:
+    """RSSエントリから画像URLを取得する（ダウンロードなし・URL直接使用）"""
+    # media:thumbnail / media:content
+    for key in ("media_thumbnail", "media_content"):
+        thumbs = entry.get(key) or []
+        if isinstance(thumbs, list) and thumbs:
+            url = thumbs[0].get("url")
+            if url:
+                return url
+
+    # enclosure（音声・動画・画像）
+    enclosures = entry.get("enclosures") or []
+    for enc in enclosures:
+        url = enc.get("href") or enc.get("url") or ""
+        if url and any(url.lower().endswith(ext) for ext in (".jpg", ".jpeg", ".png", ".webp", ".gif")):
+            return url
+
+    # summary内のimgタグ
+    summary = entry.get("summary") or ""
+    m = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', summary)
+    if m:
+        return m.group(1)
+
+    return ""
+
+
     cats = []
     host = urlparse(link).hostname or ""
 
@@ -200,6 +230,9 @@ def process_entry(entry_dict, state):
     if not summary:
         summary = "（概要はありません）"
 
+    # RSSから画像URLを直接取得（ダウンロードなし）
+    image_url = extract_image_from_rss(entry)
+
     # 本文はRSS概要＋元記事リンクのみ
     body_md = f"{summary}\n\n[続きを読む →]({link})"
 
@@ -209,12 +242,13 @@ def process_entry(entry_dict, state):
     # タイトルのサニタイズ
     safe_title = (title or "").replace('"', '\\"')
 
-    # フロントマター（imageなし）
+    # フロントマター
     fm_lines = [
         "---",
         f'title: "{safe_title}"',
         f"date: {dt.strftime('%Y-%m-%d %H:%M:%S +0900')}",
         f"categories: [{', '.join(cats)}]",
+        f'image: "{image_url}"',
         "---",
         "",
     ]
