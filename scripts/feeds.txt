@@ -1,20 +1,14 @@
-# NHK
+# NHK（画像あり）
 https://www3.nhk.or.jp/rss/news/cat0.xml
 
-# 共同通信（47NEWS）
-https://www.47news.jp/47topics.rss
-
-# 産経新聞
-https://www.sankei.com/rss/news/flash.xml
-
-# 日テレNEWS
+# 日テレNEWS（画像あり）
 https://news.ntv.co.jp/index.d.xml
 
-# テレ朝news
+# テレ朝news（画像あり）
 https://news.tv-asahi.co.jp/rss/rss.xml
 
-# FNNプライムオンライン
+# FNNプライムオンライン（画像あり）
 https://www.fnn.jp/rss
 
-# 毎日新聞
-https://mainichi.jp/rss/etc/mainichi-flash.rss
+# 産経新聞（画像あり）
+https://www.sankei.com/rss/news/flash.xml
