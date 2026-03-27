@@ -189,6 +189,30 @@ a:hover { opacity: .85; }
   background: #999;
 }
 
+/* NHKロゴ風プレースホルダー */
+.cat-NHK {
+  background: #1a1a80;
+  position: relative;
+  overflow: hidden;
+}
+.cat-NHK::before {
+  content: "NHK";
+  font-size: 1.3rem;
+  font-weight: 900;
+  font-family: "Arial Black", sans-serif;
+  color: #ffffff;
+  letter-spacing: .05em;
+}
+.cat-NHK::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #c0392b 33%, #ffffff 33%, #ffffff 66%, #c0392b 66%);
+}
+
 .cat-犯罪 { background: #8b0000; }
 .cat-スポーツ { background: #1a5276; }
 .cat-ニュース { background: #7f8c8d; }
