@@ -1,4 +1,4 @@
-# NHK（国内総合）
+# NHK 総合
 https://www3.nhk.or.jp/rss/news/cat0.xml
 
 # NHK スポーツ
@@ -10,11 +10,8 @@ https://feeds.bbci.co.uk/japanese/rss.xml
 # CNN日本語（Google News経由）
 https://news.google.com/rss/search?q=site:cnn.co.jp&hl=ja&gl=JP&ceid=JP:ja
 
-# Google News テクノロジー（日本語）
-https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGRqTVhZU0JXcGhMVWRDVFNnQVAB?hl=ja&gl=JP&ceid=JP:ja
+# ITmedia ニュース（テクノロジー）
+https://rss.itmedia.co.jp/rss/2.0/news_bursts.xml
 
-# Google News ビジネス（日本語）
-https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0FtcGhHZ0pLVUNn?hl=ja&gl=JP&ceid=JP:ja
-
-# Google News スポーツ（日本語）
-https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGw2TVdZU0FtcGhHZ0pLVUNn?hl=ja&gl=JP&ceid=JP:ja
+# ITmedia ビジネスオンライン
+https://rss.itmedia.co.jp/rss/2.0/business.xml
