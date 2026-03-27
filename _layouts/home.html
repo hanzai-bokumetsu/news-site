@@ -25,8 +25,8 @@ layout: default
       {%- for post in posts_collection -%}
       <article class="post-card" itemscope itemtype="https://schema.org/Article">
     <a class="thumb" href="{{ post.url | relative_url }}" aria-label="{{ post.title }}">
-      {% if post.image %}
-    <img class="post-thumb" src="{{ post.image | relative_url }}" alt="{{ post.title }}" loading="lazy" itemprop="image">
+      {% if post.image and post.image != "" %}
+    <img class="post-thumb" src="{{ post.image }}" alt="{{ post.title }}" loading="lazy" itemprop="image">
       {% else %}
       {% assign cat = post.categories | first | default: 'ニュース' %}
       {% assign cat_slug = cat | replace: ' ', '-' %}
