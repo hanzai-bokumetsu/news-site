@@ -151,6 +151,7 @@ def extract_image_from_rss(entry) -> str:
     return ""
 
 
+def guess_categories(entry, link, is_nhk_article: bool):
     cats = []
     host = urlparse(link).hostname or ""
 
