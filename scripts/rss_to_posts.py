@@ -231,8 +231,8 @@ def process_entry(entry_dict, state):
     if not summary:
         summary = "（概要はありません）"
 
-    # RSSから画像URLを直接取得（ダウンロードなし）
-    image_url = extract_image_from_rss(entry)
+    # RSSから画像URLを直接取得（NHKは画像なし）
+    image_url = "" if is_nhk_article else extract_image_from_rss(entry)
 
     # 本文はRSS概要＋元記事リンクのみ
     body_md = f"{summary}\n\n[続きを読む →]({link})"
