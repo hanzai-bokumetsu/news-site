@@ -1,0 +1,9 @@
+---
+title: "豪州の16歳未満に対するSNS禁止措置、効果は？　施行から3カ月で生徒に聞く"
+date: 2026-03-24 05:50:35 +0900
+categories: [BBC]
+image: "https://ichef.bbci.co.uk/ace/ws/240/cpsprodpb/2031/live/ed588310-1d0c-11f1-801d-ed3cff6bf876.jpg"
+---
+オーストラリアでは2025年12月10日、16歳未満のソーシャルメディアの利用を禁止する法律が世界で初めて施行された。BBCは、施行から3カ月が経過した同法について、オーストラリアの10代の若者たちに話を聞いた。
+
+[続きを読む →](https://www.bbc.com/japanese/articles/c2d8l2j4rd5o?at_medium=RSS&at_campaign=rss)
