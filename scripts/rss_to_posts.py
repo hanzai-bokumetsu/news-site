@@ -90,6 +90,8 @@ def dt_from_entry(entry):
     tm = entry.get("published_parsed") or entry.get("updated_parsed")
     if tm:
         dt = datetime.datetime(*tm[:6])
+        # UTC → JST (+9時間)
+        dt = dt + datetime.timedelta(hours=9)
     else:
         dt = datetime.datetime.now()
     return dt
@@ -249,10 +251,10 @@ def process_entry(entry_dict, state):
         f'title: "{safe_title}"',
         f"date: {dt.strftime('%Y-%m-%d %H:%M:%S +0900')}",
         f"categories: [{', '.join(cats)}]",
-        f'image: "{image_url}"',
-        "---",
-        "",
     ]
+    if image_url:
+        fm_lines.append(f'image: "{image_url}"')
+    fm_lines += ["---", ""]
 
     content = "\n".join(fm_lines) + body_md.rstrip() + "\n"
 
