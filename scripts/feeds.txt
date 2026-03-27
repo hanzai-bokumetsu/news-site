@@ -9,3 +9,6 @@ https://feeds.bbci.co.uk/japanese/rss.xml
 
 # CNN日本語
 https://www.cnn.co.jp/rss/cnn_topstories.rdf
+
+# CNN日本語（Google News経由）
+https://news.google.com/rss/search?q=site:cnn.co.jp&hl=ja&gl=JP&ceid=JP:ja

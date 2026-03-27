@@ -78,6 +78,11 @@ def load_state() -> dict:
     return {}
 
 def save_state(state: dict) -> None:
+    # 30日以上前のエントリを削除してファイルサイズを抑制
+    cutoff = int(time.time()) - 30 * 24 * 3600
+    done = state.get("done", {})
+    state["done"] = {k: v for k, v in done.items() if v.get("ts", 0) > cutoff}
+
     tmp = STATE.with_suffix(".tmp")
     tmp.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
     tmp.replace(STATE)
