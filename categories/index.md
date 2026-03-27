@@ -6,7 +6,7 @@ permalink: /categories/
 
 ## 犯罪の種類
 <ul>
-{% assign kinds = "ニュース, 犯罪, 性犯罪, スポーツ, 教員, 児童" | split: ", " %}
+{% assign kinds = "ニュース, 犯罪, スポーツ " | split: ", " %}
 {% for cat in kinds %}
   <li>
     <a href="{{ '/categories/' | append: cat | url_encode | append: '/' | relative_url }}">{{ cat }}</a>
