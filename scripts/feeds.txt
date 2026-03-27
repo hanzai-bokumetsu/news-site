@@ -1,14 +1,20 @@
-# NHK
+# NHK（国内総合）
 https://www3.nhk.or.jp/rss/news/cat0.xml
 
-# Reuters日本語
-https://feeds.reuters.com/reuters/JPTopNews
+# NHK スポーツ
+https://www3.nhk.or.jp/rss/news/cat7.xml
 
 # BBC日本語
 https://feeds.bbci.co.uk/japanese/rss.xml
 
-# CNN日本語
-https://www.cnn.co.jp/rss/cnn_topstories.rdf
-
 # CNN日本語（Google News経由）
 https://news.google.com/rss/search?q=site:cnn.co.jp&hl=ja&gl=JP&ceid=JP:ja
+
+# Google News テクノロジー（日本語）
+https://news.google.com/rss/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRGRqTVhZU0JXcGhMVWRDVFNnQVAB?hl=ja&gl=JP&ceid=JP:ja
+
+# Google News ビジネス（日本語）
+https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0FtcGhHZ0pLVUNn?hl=ja&gl=JP&ceid=JP:ja
+
+# Google News スポーツ（日本語）
+https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGw2TVdZU0FtcGhHZ0pLVUNn?hl=ja&gl=JP&ceid=JP:ja
