@@ -172,6 +172,8 @@ def guess_categories(entry, link, is_nhk_article: bool, entry_dict_feed: str = "
         cats.append("BBC")
     elif "cnn.co.jp" in host or "cnn.com" in host or "cnn.co.jp" in feed_url:
         cats.append("CNN")
+    elif "itmedia.co.jp" in host or "itmedia.co.jp" in feed_url:
+        cats.append("ITmedia")
 
     title = (entry.get("title") or "")
     PREFS = ["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県",

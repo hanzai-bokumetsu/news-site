@@ -213,7 +213,20 @@ a:hover { opacity: .85; }
   background: linear-gradient(90deg, #c0392b 33%, #ffffff 33%, #ffffff 66%, #c0392b 66%);
 }
 
-/* CNNロゴ風プレースホルダー */
+/* ITmediaロゴ風プレースホルダー */
+.cat-ITmedia {
+  background: #e65c00;
+  position: relative;
+  overflow: hidden;
+}
+.cat-ITmedia::before {
+  content: "IT";
+  font-size: 1.5rem;
+  font-weight: 900;
+  font-family: "Arial Black", sans-serif;
+  color: #ffffff;
+  letter-spacing: .05em;
+}
 .cat-CNN {
   background: #cc0000;
   position: relative;
@@ -266,6 +279,10 @@ a.badge[title="カテゴリ: Reuters"] {
 }
 a.badge[title="カテゴリ: CNN"] {
   background: #cc0000;
+  color: #ffffff;
+}
+a.badge[title="カテゴリ: ITmedia"] {
+  background: #e65c00;
   color: #ffffff;
 }
 
