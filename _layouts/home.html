@@ -39,7 +39,7 @@ layout: default
         <div class="card-body">
           <div class="meta-line">
             <time class="date-pill" datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">
-              {{ post.date | date: "%Y-%m-%d" }}
+              {{ post.date | date: "%Y-%m-%d %H:%M" }}
             </time>
 
             {%- comment -%}
