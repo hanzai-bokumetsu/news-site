@@ -122,8 +122,18 @@ def extract_summary_from_rss(entry: dict) -> str:
 
 def guess_categories(entry, link, is_nhk_article: bool):
     cats = []
+    host = urlparse(link).hostname or ""
+
+    # ソース判定
     if is_nhk_article:
         cats.append("NHK")
+    elif "reuters.com" in host:
+        cats.append("Reuters")
+    elif "bbc.co.uk" in host or "bbc.com" in host:
+        cats.append("BBC")
+    elif "cnn.co.jp" in host or "cnn.com" in host:
+        cats.append("CNN")
+
     title = (entry.get("title") or "")
     PREFS = ["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県",
              "埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県",
@@ -134,6 +144,7 @@ def guess_categories(entry, link, is_nhk_article: bool):
         if p in title:
             cats.append(p)
             break
+
     if not cats:
         cats.append("ニュース")
     return cats
