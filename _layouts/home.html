@@ -31,7 +31,7 @@ layout: default
       {% assign cat = post.categories | first | default: 'ニュース' %}
       {% assign cat_slug = cat | replace: ' ', '-' %}
     <div class="thumb-placeholder cat-{{ cat_slug }}">
-      {{ cat | slice: 0, 1 }}
+      {% unless cat == 'NHK' %}{{ cat | slice: 0, 1 }}{% endunless %}
     </div>
       {% endif %}
     </a>
