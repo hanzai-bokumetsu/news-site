@@ -1,65 +1,5 @@
 {
   "done": {
-    "bc3668cf601a707e6f0067bfc7ed7ee113f986bba9ba200e689041270f2c368a": {
-      "link": "https://www.itmedia.co.jp/news/article/2608/11/2000000494/",
-      "title": "ザッカーバーグCEO、超知能の集中化に警鐘 「単一の善意ある超知能は存在しない」とオープンモデル公開再開へ",
-      "saved": "2026-08-11-satukahakuceo-chao-zhi-neng-noji-zhong-hua-nijing-zhong-dan-yi-noshan-yi-aruchao.md",
-      "ts": 1786401373
-    },
-    "1868fd1410b3d89f783311ba71ff590f814483dc02c5b8f0bc5db1278cf9ef43": {
-      "link": "https://www.itmedia.co.jp/news/article/2608/11/2000000474/",
-      "title": "親が子にAIを使わせる理由は「勉強に役立つ」ではなく「うちの子だけは遅れさせたくない」？　2000人を調査",
-      "saved": "2026-08-11-qin-kazi-niaiwoshi-waseruli-you-ha-mian-qiang-niyi-li-tu-tehanaku-utinozi-takeha.md",
-      "ts": 1786401373
-    },
-    "40bea62b10593457ca6dc85a210a0f3231bc919984487de45336477bdae59dcb": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/11/news004.html",
-      "title": "スマホ契約で10万円荒稼ぎ……　携帯キャリアが総務省に泣きつく“ホッピング”の実態とは",
-      "saved": "2026-08-11-sumahoqi-yue-te10mo-yuan-huang-jia-ki-xi-dai-kiyariakazong-wu-sheng-niqi-kituku-.md",
-      "ts": 1786401373
-    },
-    "b4660ba8f5148b75b1e0cc537ede5d2bbbe62a7a19c3392bb338121e454eb9a7": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/11/news006.html",
-      "title": "なぜ若者は広島を離れるのか　5万件の口コミ分析で見えた\"意外な理由\"",
-      "saved": "2026-08-11-naseruo-zhe-haguang-dao-woli-rerunoka-5mo-jian-nokou-komifen-xi-tejian-eta-yi-wa.md",
-      "ts": 1786401373
-    },
-    "31de4dd62d78e7162f3a93da3b4188f995a87e1b0b5d7d1e6381c3a9c5001f0e": {
-      "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBRNk5ZaFJ5OE0wMXhfUFI5VmJQMFhDZk02QVNSSEtxa3c2NVI5VHNTXzJYSmdDTXFhUkhTdjUtS19TbDFEQVBsdVdzbFFHTXVmWnMw?oc=5",
-      "title": "第2次大戦中に墜落した撃墜王の搭乗機、翼端が故郷に帰還 米ウィスコンシン州(3/3) - CNN.co.jp",
-      "saved": "2026-08-10-di-2ci-da-zhan-zhong-nizhui-luo-sitaji-zhui-wang-noda-cheng-ji-yi-duan-kagu-xian-2.md",
-      "ts": 1786401373
-    },
-    "a79251d91e5f0450b5c47f08cdd2b77440135ef2aced93e1487c2cd23c55b8bf": {
-      "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5RVUNaeW8zc09lcnFyUzJIZDNHTXpkUnR6TW1lSXJDaGViUVRoT0NWLURhMTZvYk5FS1VJTWlSbWxxdDRnaE1MajM1RmkxUmhqUU92dQ?oc=5",
-      "title": "労働組合が苦情を申し立てる際に提出した写真のうちの1枚/UNITE HERE Local 11 - CNN.co.jp",
-      "saved": "2026-08-10-lao-dong-zu-he-kaku-qing-woshen-sili-teruji-niti-chu-sitaxie-zhen-noutino1mei-un.md",
-      "ts": 1786401373
-    },
-    "81099f54dce07dc992b2ef317ee8ca1860009da5114a77290d8c4df993c71063": {
-      "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9idlg4UXdJUGdYbkNQVzdDT09vcVlISXZQSlhHZFZwRHJ0cnFpZHliU29ZOGN6VTIzVnd1dXcyMEtwQjVkd0hzLUtCS0lyTHQ4YTRr?oc=5",
-      "title": "【分析】モスクワでの大規模爆発、プーチン氏の防護シェルターさえ破壊する勢い(1/2) - CNN.co.jp",
-      "saved": "2026-06-19-fen-xi-mosukuwatenoda-gui-mo-bao-fa-hutinshi-nofang-hu-sierutasaepo-huai-surushi-2.md",
-      "ts": 1786401373
-    },
-    "5ba0e753a742af879e53c92c33d7f6ac1a8ad93f1ebb764597163dd42f08bc24": {
-      "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5FWlRFUERtWnUwY3FQQmNLa1B5ZFdCNVhZR0FKbF9UVHRUQWs1N0RLRWRqMkZmTmUtSFhpcEFNbmpyVEhMVzEyRzlld1p1aEw3akNr?oc=5",
-      "title": "縮小止まらず死にゆく「死海」、救う手立ても定まらず(1/2) - CNN.co.jp",
-      "saved": "2026-05-29-suo-xiao-zhi-marasusi-niyuku-si-hai-jiu-ushou-li-temoding-marasu-1-2-cnn-co-jp.md",
-      "ts": 1786401373
-    },
-    "7f04b2f1b3d6a2b4d3e422bc7fe31566c693feac72d81af080eb255ed52ecb02": {
-      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBWWUt5Mkt2amlXSEpUV3pGU1BHRmpjNkZCMklIZUZUY25WU19QS1NwRDE0M0NzbmxaWXppZzN3YThhWElsYXBTQXlBNW9iMEk?oc=5",
-      "title": "ロシアの爆撃機、滑走路で炎上 - CNN.co.jp",
-      "saved": "2025-06-02-rosianobao-ji-ji-hua-zou-lu-teyan-shang-cnn-co-jp-2.md",
-      "ts": 1786401373
-    },
-    "0629d2fb777e2e2b57d56bfb6888c61970b69e2e857f17b7ed363b25c3402e0c": {
-      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBUMDZmaHFsQ1YwRG5BVlRUYlR6Nm9HYllYRWVrWnE2M0NRZGNHdUdCUDU5TnYwS0wweVpfdG90aUxFQXowbDRMeDQ3Z0I0RnBT?oc=5",
-      "title": "「Ｆ３５、探知されずに日本上空を飛行」 トランプ氏 - CNN.co.jp",
-      "saved": "2017-05-13-f35-tan-zhi-saresuniri-ben-shang-kong-wofei-xing-toranhushi-cnn-co-jp-3.md",
-      "ts": 1786401373
-    },
     "c67fe4fb099dac619f09923841889a67764178c5d698ee5d140b80d46288448b": {
       "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5SRFNfNU9IWlJCUlJiTGxtdmRtUUpfaGtLbURSaFkxU1NYOWFfeWYzR0xUZlVpZEtYclZ4djZlWEVjRFVST3hfUWE5UjZSR0tu?oc=5",
       "title": "米国内線2便で乗客が乗務員を脅迫 ロックダウン含む緊急対応で欠航 - CNN.co.jp",
@@ -9287,6 +9227,132 @@
       "title": "クルーズ船に乗船の８０代女性、島に取り残されて死亡 オーストラリア - CNN.co.jp",
       "saved": "2025-10-30-kurusuchuan-nicheng-chuan-no80dai-nu-xing-dao-niqu-rican-saretesi-wang-osutorari-6.md",
       "ts": 1788963085
+    },
+    "06e355aeaa249e456e1902d4a04bf2ba9caaa11f322b1ddafe9a373432a8ba52": {
+      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBCSGdIRlVUcmZSTXRyMjI2TTNsZExpdk9OTlJ2ZXphLVZ6dGp6V1pUUnV6Z2RHS0c0cXJUSll1NWhwWmVBTzRuU0hoaWl1RWlC?oc=5",
+      "title": "トランプ氏、イラン戦争は中間選挙後に終結と予想 ガソリン価格も下落と発言 - CNN.co.jp",
+      "saved": "2026-09-10-toranhushi-iranzhan-zheng-hazhong-jian-xuan-ju-hou-nizhong-jie-toyu-xiang-kasori.md",
+      "ts": 1788997859
+    },
+    "4f3e91c672eaa8bf9284c44deaf4b87781b36c6fc6dbda0fa0f46e91f09b4250": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001345/",
+      "title": "Google、フィンランドに過去最大の約2.3兆円投資　AIデータセンター増設や原発電力調達へ",
+      "saved": "2026-09-10-google-huinrantoniguo-qu-zui-da-noyue-2-3zhao-yuan-tou-zi-aitetasentazeng-she-ya.md",
+      "ts": 1788997859
+    },
+    "48b8b69bbbcd7772ac8f44e07128dbfa4d57d14585f87a0275ebce4b6d67978d": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news030.html",
+      "title": "くら寿司「ちいかわ騒動」の深層、過去にはセブンも……　ランダム景品の収益力と課題",
+      "saved": "2026-09-10-kurashou-si-tiikawasao-dong-noshen-ceng-guo-qu-nihasehunmo-rantamujing-pin-nosho.md",
+      "ts": 1788997859
+    },
+    "58e80d28f8b38702ecd60d44b7fc3fb1055077e586ce94a1a5f6cb488440d318": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news037.html",
+      "title": "人間向けとAI向けのコンテンツを“別建て”で設計する──「AI検索」対応策の新たな一手となるか",
+      "saved": "2026-09-10-ren-jian-xiang-ketoaixiang-kenokontentuwo-bie-jian-te-teshe-ji-suru-aijian-suo-d.md",
+      "ts": 1788997859
+    },
+    "ccfd876cb8ec57a96db1e6fa4ec5d4e4a91bbf4cf69c7ceb63df92eb97e200b3": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news036.html",
+      "title": "買い物時に「親友よりもAIを信じる」7割超──「エージェンティックコマース」時代に仕込みたい「3つの戦略」",
+      "saved": "2026-09-10-mai-iwu-shi-ni-qin-you-yorimoaiwoxin-siru-7ge-chao-esienteitukukomasu-shi-dai-ni.md",
+      "ts": 1788997859
+    },
+    "603ff2cfec453854a9e846200041813878c2a1bae3230dd12de0c1de97747e88": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news017.html",
+      "title": "他部門はリモートでも「総務だけ毎日出社」の理不尽、なぜ続く？　“オフィスの番人”からの脱却方法は",
+      "saved": "2026-09-10-ta-bu-men-harimototemo-zong-wu-takemei-ri-chu-she-noli-bu-jin-nasesok-ku-ohuisun.md",
+      "ts": 1788997859
+    },
+    "e049ff3426cecbb50c1a04ba939ea5ec654ba34ae6abb95c83e79dd02b250a74": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001344/",
+      "title": "「めっちゃカメレオン」Switch 2版発売　2人で開発したインディゲー、3カ月で到達",
+      "saved": "2026-09-10-metutiyakamereon-switch-2ban-fa-mai-2ren-tekai-fa-sitainteike-3kayue-tedao-da.md",
+      "ts": 1788997859
+    },
+    "facf4ff78dd4ec3a3dd88dd79a14ad0e5e3ccbaa5b9dc3205f8f4f4a25a5d4ee": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news071.html",
+      "title": "「AI社員」NECは36体、無人部署を新設　DeNAは17体、南場社長「けなげ」",
+      "saved": "2026-09-10-aishe-yuan-necha36ti-wu-ren-bu-shu-woxin-she-denaha17ti-nan-chang-she-chang-kena.md",
+      "ts": 1788997859
+    },
+    "8d6ef23e2d5eccd5d2f9e7e53df00218fd45c93d3ce29090cf1dd5380f300794": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001343/",
+      "title": "新型iPhone「高すぎ」「買えない」悲鳴……1台約22?57万円　「換算レート円安すぎ」の声も",
+      "saved": "2026-09-10-xin-xing-iphone-gao-suki-mai-enai-bei-ming-1tai-yue-22-57mo-yuan-huan-suan-retoy.md",
+      "ts": 1788997859
+    },
+    "0a72ecda96c5bab7ee3d1d0d263ffed00f96b9fe57ac10b0335813e60975dec8": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news028.html",
+      "title": "「かすり傷を負ってでも歩く」　日立が見せる覚悟　売り上げ5000億円見込む“AI事業”の拡大にどう挑むか",
+      "saved": "2026-09-10-kasurishang-wofu-tutetemobu-ku-ri-li-kajian-serujue-wu-mai-rishang-ke5000yi-yuan.md",
+      "ts": 1788997859
+    },
+    "c17f1e67b06044591e208f5155953d920b0d398a3e5270e1f4638c16560fdf83": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news031.html",
+      "title": "新人はあえてAI禁止！　吉本興業元会長とSTARTO創業CEOが明かす「熱狂を生む現場主義」",
+      "saved": "2026-09-10-xin-ren-haaeteaijin-zhi-ji-ben-xing-ye-yuan-hui-chang-tostartochuang-ye-ceokamin.md",
+      "ts": 1788997859
+    },
+    "dda85d99f997bc76ca12b813568bb41ea379f1439e3eeb3199e20063ba1302a8": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001342/",
+      "title": "Anthropic在籍の研究者2人も同調──「AIが人類を滅ぼしかねないと本気で考えている」",
+      "saved": "2026-09-10-anthropiczai-ji-noyan-jiu-zhe-2ren-motong-diao-aikaren-lei-womie-hosikanenaitobe.md",
+      "ts": 1788997859
+    },
+    "42c57e1a2bdcf8525c709f0f75b6c673cb0a595a003deb50249eb68615d39575": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001341/",
+      "title": "「iPhone 18」シリーズ徹底比較　「17」シリーズとの違いをチェック",
+      "saved": "2026-09-10-iphone-18-sirisuche-di-bi-jiao-17-sirisutonowei-iwotietuku.md",
+      "ts": 1788997859
+    },
+    "fab6ee4c728576b0c62283827b380fd8a756dac795b49cd7c943a0e7c0235d56": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news014.html",
+      "title": "飲食店の倒産が過去最多ペース　8月は80件、なぜ？",
+      "saved": "2026-09-10-yin-shi-dian-nodao-chan-kaguo-qu-zui-duo-hesu-8yue-ha80jian-nase.md",
+      "ts": 1788997859
+    },
+    "581561664d1355f14d96e7d0421e5c1b8015f2303f4c3618fece0ff798e5c10d": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001336/",
+      "title": "iPhone 18シリーズ発表、今年はPro・Pro Maxのみ　なんと“無印”なし　価格は21万9800円から【更新終了】",
+      "saved": "2026-09-10-iphone-18sirisufa-biao-jin-nian-hapropro-maxnomi-nanto-wu-yin-nasi-jia-ge-ha21mo.md",
+      "ts": 1788997859
+    },
+    "8cc87bca8090bc5646fdb049eb4a38b0c5947ed63293362f3a1a4fb9428f8929": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001340/",
+      "title": "Apple、既存iPhoneを値上げ　17は14万2800円→15万9800円から　Airや17eも",
+      "saved": "2026-09-10-apple-ji-cun-iphonewozhi-shang-ke-17ha14mo-2800yuan-15mo-9800yuan-kara-airya17em.md",
+      "ts": 1788997859
+    },
+    "9d59d550b53e28b23aaa52ac3fc0ad4ab58bc69cadda064e3d20f8c64d03749d": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/10/news038.html",
+      "title": "「半導体関連メーカー」の2025年度売上高、過去5年で最高に　売り上げトップの企業は？",
+      "saved": "2026-09-10-ban-dao-ti-guan-lian-meka-no2025nian-du-mai-shang-gao-guo-qu-5nian-tezui-gao-ni-.md",
+      "ts": 1788997859
+    },
+    "3ba710cb832f9cf6ffc86b2565f2bfeb91afe2fe4b1b3d65150a676935c6b6e8": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001335/",
+      "title": "「iPhone Duo」発表　Apple初の折りたたみスマホ　36万4800円から",
+      "saved": "2026-09-10-iphone-duo-fa-biao-applechu-nozhe-ritatamisumaho-36mo-4800yuan-kara.md",
+      "ts": 1788997859
+    },
+    "b91e2b5a7808b638faaa1d99c612d534dc33293363c109369ed1c3bd14343c23": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/10/2000001339/",
+      "title": "「AirPods 5」登場　ノイキャン性能向上、従来比でノイズを50％除去　2万3800円から",
+      "saved": "2026-09-10-airpods-5-deng-chang-noikiyanxing-neng-xiang-shang-cong-lai-bi-tenoisuwo50-chu-q.md",
+      "ts": 1788997859
+    },
+    "f402afac450246329bd3a45596f642f147065e506e706915c43b1c82be4452c5": {
+      "link": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBLUTRScGFaY05uSjJlODZ4NEVtZ2hpNlJHa2hDWndWeFFQY0hPNHVJRkJsQ294UnhHN2MydXRxWDc4WjltX1MwcEdDTW1PM3BwQmlqVDZR?oc=5",
+      "title": "米紙記者、「日本人の優勝は不愉快」のツイートで解雇に - CNN.co.jp",
+      "saved": "2017-05-30-mi-zhi-ji-zhe-ri-ben-ren-noyou-sheng-habu-yu-kuai-notuitotejie-gu-ni-cnn-co-jp-2.md",
+      "ts": 1788997859
+    },
+    "8599b07fc84e65f804bc93047325f96f66301815eb6b862f2ecf7dbbf40b094f": {
+      "link": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE4zT0N2ckFYTF9wQ3ZYU0g3b2tpcnZnMmd3X2c5a09kUmh5VXJ1dHQtYkpTSm9TZTBmWVFnR0txcXNKLXM?oc=5",
+      "title": "Odd News - CNN.co.jp",
+      "saved": "2015-11-05-odd-news-cnn-co-jp.md",
+      "ts": 1788997859
     }
   }
 }
