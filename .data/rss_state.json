@@ -1,77 +1,5 @@
 {
   "done": {
-    "e28a39c5ef7a119f0b80cafdabe936e0d97c2a0314e313fe40194675fca038e0": {
-      "link": "https://www.itmedia.co.jp/news/article/2608/12/2000000497/",
-      "title": "Anthropic、「Claude」で生成したテキストに“見えない透かし”　日本を含むグローバルに適用へ",
-      "saved": "2026-08-12-anthropic-claude-tesheng-cheng-sitatekisutoni-jian-enaitou-kasi-ri-ben-wohan-muk.md",
-      "ts": 1786488031
-    },
-    "8cc61485a24a7d2d66d2aae9494e261e84b78b6573c88a7b1ce5097cd556d2cf": {
-      "link": "https://www.itmedia.co.jp/news/article/2608/12/2000000471/",
-      "title": "「食事中に水を飲むと食べ過ぎない」、実はウソ？　食べる量を左右していたのは…… 米研究者が検証",
-      "saved": "2026-08-12-shi-shi-zhong-nishui-woyin-mutoshi-heguo-kinai-shi-hauso-shi-heruliang-wozuo-you.md",
-      "ts": 1786488031
-    },
-    "9d5450d2b22a89bb68bb87a43ec0bf9b338be9707e9805fedcb34a42c16f0881": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/12/news024.html",
-      "title": "【注目の企業】キオクシア、なぜこんなに話題？　今からでも間に合う“入門記事”まとめました",
-      "saved": "2026-08-12-zhu-mu-noqi-ye-kiokusia-nasekonnanihua-ti-jin-karatemojian-nihe-u-ru-men-ji-shi-.md",
-      "ts": 1786488031
-    },
-    "242b5d1a9bce245d401d4b503c8234913b818137744b74b1c70dd408c1b25fd4": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/12/news012.html",
-      "title": "「よく聞こえなかったデスら」――『ドラクエ』に“AIキャラ”登場、世界観を守るために張り巡らせた創意工夫",
-      "saved": "2026-08-12-yokuwen-koenakatutatesura-torakue-ni-aikiyara-deng-chang-shi-jie-guan-woshou-rut.md",
-      "ts": 1786488031
-    },
-    "e4b76674dae7ac4cfcdc72aaa5ad267d1678efd44c027884fbc7b5942baadb02": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/12/news030.html",
-      "title": "TBSテレビが系列局と作った「12社共生オフィス」　赤坂のワンフロアに集結した理由",
-      "saved": "2026-08-12-tbsterehikaxi-lie-ju-tozuo-tuta-12she-gong-sheng-ohuisu-chi-ban-nowanhuroaniji-j.md",
-      "ts": 1786488031
-    },
-    "ceb6a2f5cc79574e63d2966bcbd9e5d20c35247e697c9944b1c970ca35e830a8": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/12/news003.html",
-      "title": "「モバイルバッテリーの発火」8月が最多　事故どう防ぐ？　160万個・1億回レンタルしたCHARGESPOTに聞いてみた",
-      "saved": "2026-08-12-mohairuhatuterinofa-huo-8yue-kazui-duo-shi-gu-toufang-ku-160mo-ge-1yi-hui-rentar.md",
-      "ts": 1786488031
-    },
-    "c3d9a49f72b85173b00068588e671aa0f4b5f3bd5c425b6a8420675597197ecf": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/12/news027.html",
-      "title": "日本発AI「Sakana Fugu」は何がすごい？　“小さなAIの群れ”で巨大AIに挑む",
-      "saved": "2026-08-12-ri-ben-fa-ai-sakana-fugu-hahe-kasukoi-xiao-sanaainoqun-re-teju-da-ainitiao-mu.md",
-      "ts": 1786488031
-    },
-    "e29711771db4df34c4fb88ed6952fafed6fa4e9cb87a39d22f51bd1316d81cef": {
-      "link": "https://www.itmedia.co.jp/business/articles/2608/12/news020.html",
-      "title": "「退職」が原因の倒産、5年連続増加　賃上げできず人材流出が企業を直撃",
-      "saved": "2026-08-12-tui-zhi-kayuan-yin-nodao-chan-5nian-lian-sok-zeng-jia-ren-shang-ketekisuren-cai-.md",
-      "ts": 1786488031
-    },
-    "11e827582c36e5a34a5c73c066e30b8e771506a9c2401cf06fe04d5a7626aa05": {
-      "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5nVkx3NzA5ckZvRjhiVnh2N0FTWjlyazZrRENvUGpYVk5PRXFxa3VreVRQTzkxXzNQODg0LXZiQ05NTTNuNTFpMlZLdkYzZUxnUlI0cw?oc=5",
-      "title": "カタール寄贈機に乗り換えるため旧型機から降機するトランプ米大統領＝7月8日、英ミルデンホール空軍基地 - CNN.co.jp",
-      "saved": "2026-08-11-kataruji-zeng-ji-nicheng-rihuan-erutamejiu-xing-ji-karajiang-ji-surutoranhumi-da.md",
-      "ts": 1786488031
-    },
-    "401335101e2a3c58e8d74cd4fd423999c1180b792738a7086662ae61971a2b61": {
-      "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1yRXBrd2NVMUpZT3FTdHlVZElLQUgtLVpsaHJWSWJJUTUxTUxMRGdJazkwV25ZcW56NW9rQWVENl93ZVFoOFRrSzlSdThEd1B1WkZKQw?oc=5",
-      "title": "12日に起きる皆既日食の道筋 - CNN.co.jp",
-      "saved": "2026-08-11-12ri-niqi-kirujie-ji-ri-shi-nodao-jin-cnn-co-jp.md",
-      "ts": 1786488031
-    },
-    "f2a332258fb96914aabe7fadfff90b29c434deedbc71523728aef638d9e2ccb4": {
-      "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBGTlNNNVluY1QxSkhDblU0Sm1qcTV3dE45QmhKX0NNeXdIa0Z1SENfMUZXNG5YNDBOU1lPYnZsTHRfalF5cExJcGhQaGhoSGxLTWRJ?oc=5",
-      "title": "トランプ米大統領の暗殺計画に関する情報、イスラエルが米国に伝達 - CNN.co.jp",
-      "saved": "2026-07-10-toranhumi-da-tong-ling-noan-sha-ji-hua-niguan-suruqing-bao-isuraerukami-guo-nich-2.md",
-      "ts": 1786488031
-    },
-    "d01b9449fa6b2fdd59c57bf0b313f94c7c51963106458a7eafe2b70aeecf5336": {
-      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE0tbjNDS3JXOFFTOUtPZTJyMTgzaGZvZjhJMVpKZDJnVmtEWVVOcmhXWWhVbDc3bFY4MXZQRUdmUVotSHVoa0hVWmN4ODg0MzBu?oc=5",
-      "title": "「ピンポンダッシュ」の１１歳少年、背後から撃たれて死亡 米ヒューストン - CNN.co.jp",
-      "saved": "2025-09-01-hinhontatusiyu-no11sui-shao-nian-bei-hou-karaji-taretesi-wang-mi-hiyusuton-cnn-c.md",
-      "ts": 1786488031
-    },
     "2b2064777af81c379cd4d5113e29d790eb9fd970faaaa12a89216162f37966b1": {
       "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE11Q2xxSnJ2OHU4QU1BRTV3aXVCVGtwZHFqTEV3TXNEckZSdF82NVc3ZEE2WGVtcUFjZC03aWVxNHlYaEYteThhbTh0dGYtNzVqY240?oc=5",
       "title": "ロシアで拘束の米退役海兵隊員、解放 発話はできるものの歩行は困難 - CNN.co.jp",
@@ -9461,6 +9389,84 @@
       "title": "「Ｆ３５、探知されずに日本上空を飛行」 トランプ氏 - CNN.co.jp",
       "saved": "2017-05-13-f35-tan-zhi-saresuniri-ben-shang-kong-wofei-xing-toranhushi-cnn-co-jp-4.md",
       "ts": 1789049109
+    },
+    "7e143aa76d16115fc2345458ed07dbf9f4966e510671d2c8b72f291f693fe200": {
+      "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1TZ0NfV2hmOGQ4MnI2R1FCU3l1U21pcVQyVmsxWGo0ZUtlQzFmcllHblZ0dHZYY1dqVkpqUGYzRDVkalVzM3J0SjlTdl9nZVlX?oc=5",
+      "title": "トランプ氏、5000ドル配当案に「議会承認は不要」 歳出承認の権限は議会に - CNN.co.jp",
+      "saved": "2026-09-11-toranhushi-5000torupei-dang-an-ni-yi-hui-cheng-ren-habu-yao-sui-chu-cheng-ren-no.md",
+      "ts": 1789083915
+    },
+    "7a219ae5edad7f72b3b08931d97d180972174fec0eb4cdefa6c8bd68c0ff3e22": {
+      "link": "https://www.itmedia.co.jp/news/article/2609/11/2000001390/",
+      "title": "Anthropic、AI悪用レポートを公開　中国AI企業の「蒸留」、各国政府の監視・世論操作、生物兵器につながり得る研究を列挙",
+      "saved": "2026-09-11-anthropic-aie-yong-rehotowogong-kai-zhong-guo-aiqi-ye-no-zheng-liu-ge-guo-zheng-.md",
+      "ts": 1789083915
+    },
+    "817d5b49129044841515932b215592bdf1b33d64318a087d082c42af8277bcc2": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news005.html",
+      "title": "祇園に「1泊300万円の部屋」　泊まる人は何をしているのか　帝国ホテルの総支配人に聞いた",
+      "saved": "2026-09-11-zhi-yuan-ni-1bo-300mo-yuan-nobu-wu-bo-maruren-hahe-wositeirunoka-di-guo-hoteruno.md",
+      "ts": 1789083915
+    },
+    "563da413194afbd7a2057f5c68828b3a5f786b0cf7500073861d05bf1edbc3b0": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news017.html",
+      "title": "「私は理由を聞いているだけなのに」――職場でも起きうる「納得するまで詰める」ことのリスク",
+      "saved": "2026-09-11-si-hali-you-wowen-iteirutakenanoni-zhi-chang-temoqi-kiuru-na-de-surumatejie-meru.md",
+      "ts": 1789083915
+    },
+    "d9c6ca6936fbd6e0c1b950dc693f70a091714524b7892e8d980b011345d7f765": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news052.html",
+      "title": "ロボット3000台が商品を運ぶ　アマゾンが「関西最大」の物流拠点",
+      "saved": "2026-09-11-rohotuto3000tai-kashang-pin-woyun-hu-amasonka-guan-xi-zui-da-nowu-liu-ju-dian.md",
+      "ts": 1789083915
+    },
+    "04d3e6b9b058db7c266d3a9abb6f260060c475aa6a16a1495e59a7aaf2a51b04": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news053.html",
+      "title": "パナソニック、AI向け蓄電システム売上高1.5兆円規模も　EV電池から転換",
+      "saved": "2026-09-11-hanasonituku-aixiang-kexu-dian-sisutemumai-shang-gao-1-5zhao-yuan-gui-mo-mo-evdi.md",
+      "ts": 1789083915
+    },
+    "885f620cbdaab69200161a227b9f1c3f0c6d1e8fe2d792212a81f1692c077353": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news030.html",
+      "title": "「AI利用料は90％下落、でも支出増」の怪――AIコスト問題で注目の「ジェボンズのパラドックス」から考える",
+      "saved": "2026-09-11-aili-yong-liao-ha90-xia-luo-temozhi-chu-zeng-noguai-aikosutowen-ti-tezhu-mu-no-s.md",
+      "ts": 1789083915
+    },
+    "2301ba1ada5496c702ef02bf352271c5f190447616f8f85c74e9ba8605d3d6eb": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news020.html",
+      "title": "好業績なのに“上場廃止”　なぜネットワンはSCSKとの「攻めの統合」に賭けたのか",
+      "saved": "2026-09-11-hao-ye-ji-nanoni-shang-chang-fei-zhi-nasenetutowanhascsktono-gong-menotong-he-ni.md",
+      "ts": 1789083915
+    },
+    "4c309ee503b2f7190246740c5505678950a0ac64bf73c7e9da649ed5cbd4abe2": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news022.html",
+      "title": "働きがいがある人は会社に残る？　早期退職制度で見えた「残る人、去る人」",
+      "saved": "2026-09-11-dong-kikaikaaruren-hahui-she-nican-ru-zao-qi-tui-zhi-zhi-du-tejian-eta-can-ruren.md",
+      "ts": 1789083915
+    },
+    "1d1e48af7c351b88b5e6132b9e6e69907bb16265f9462734082bca0d0c792fd6": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news013.html",
+      "title": "はてな「11億円流出事件」から考える「正しい裁量」と「無責任な丸投げ」の違い",
+      "saved": "2026-09-11-hatena-11yi-yuan-liu-chu-shi-jian-karakao-eru-zheng-siicai-liang-to-wu-ze-ren-na.md",
+      "ts": 1789083915
+    },
+    "1a53adb6c30ad434de4cb34d579985753e4048c46a7e153340275c2f5e8c4a74": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news009.html",
+      "title": "「今日、何個売れるか」を当てるのをやめる　総菜の需要が読めない小売りが持つべき「幅」とは",
+      "saved": "2026-09-11-jin-ri-he-ge-mai-reruka-wodang-terunowoyameru-zong-cai-noxu-yao-kadu-menaixiao-m.md",
+      "ts": 1789083915
+    },
+    "2acad91e48d73203c9e462ac37f877a80dc8dd0c99e223ad19df45f6ddbdad23": {
+      "link": "https://www.itmedia.co.jp/business/articles/2609/11/news012.html",
+      "title": "1200体のAIが「群れ」で暴走　なぜ想定を超える“協調”が起きたのか",
+      "saved": "2026-09-11-1200ti-noaika-qun-re-tebao-zou-nasexiang-ding-wochao-eru-xie-diao-kaqi-kitanoka.md",
+      "ts": 1789083915
+    },
+    "132e927153d6a811cdec9ba2a269b802f180db6ca5cdb366a0ed0bdc7eb74fac": {
+      "link": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1yUTNPRFJMVDA2c1dPYTVWN1hjTk5uQVRpckgzR0VJVlhlOGhnSlBTX0VaeFh5ZEs3MjFkbTRxNjVoOTFjN04taW03VVNVNDQ?oc=5",
+      "title": "イラン、地下トンネルに並ぶドローンの映像公開 - CNN.co.jp",
+      "saved": "2026-03-02-iran-di-xia-tonnerunibing-hutoronnoying-xiang-gong-kai-cnn-co-jp-2.md",
+      "ts": 1789083915
     }
   }
 }
